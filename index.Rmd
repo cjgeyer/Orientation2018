@@ -44,8 +44,71 @@ knitr::opts_chunk$set(tidy = FALSE, out.width='\\textwidth',
                       warning=FALSE)
 ```
 
-# Introduction {-}
+# Introduction
 
 These are some notes for grad student orientation in the School of Statistics,
 University of Minnesota, Fall 2018.
 
+## License
+
+This work is licensed under a Creative Commons
+Attribution-ShareAlike 4.0 International License
+(<http://creativecommons.org/licenses/by-sa/4.0/>).
+
+
+## R
+
+ * The version of R used to make this document is `r getRversion()`.
+
+ * The version of the `bookdown` package used to make this document is `r packageVersion("bookdown")`.
+
+ * The version of the `knitr` package used to make this document is `r packageVersion("knitr")`.
+ * The version of the `rmarkdown` package used to make this document is `r packageVersion("rmarkdown")`.
+
+ * The version of the `knitr` package used to make this document is `r packageVersion("knitr")`.
+
+ * The version of the `ggplot2` package used to make this document is `r packageVersion("ggplot2")`.
+
+## Other Learning Materials
+
+### An Introduction to R
+
+By far the best book on R is free, written by the R core team, always up to
+date with the current version, and always correct.  It is called
+*An Introduction to R* and can be found in your R distribution.  Do
+```{r eval=FALSE}
+help.start()
+```
+to start browser help and click on the "An Introduction to R" link.
+
+If can also be found [on-line at CRAN](https://cloud.r-project.org/doc/manuals/r-release/R-intro.html).
+
+[PDF and e-book versions are also available at CRAN](https://cloud.r-project.org/manuals.html).
+
+There are five other manuals that come with R, but they are for experts.
+You don't want to read them yet.
+
+### An R Short Course
+
+Your humble author was one of five instructors for a two-day short course
+on R.  [Here are the notes for it](https://irsaatumn.github.io/RWorkshop18/).
+
+### An R Course (Undergraduate)
+
+Your humble author taught Stat 3701 (undergraduate statistical computing).
+[Here is the web site for that](http://www.stat.umn.edu/geyer/3701/).
+
+Of particular interest are the
+
+ * [reproducible research examples](http://www.stat.umn.edu/geyer/3701/repro/).
+
+ * [course notes](http://www.stat.umn.edu/geyer/3701/notes/).
+
+### An R Course (PhD Level)
+
+Your humble author taught Stat 8054 (PhD level statistical computing).
+[Here is the web site for that](http://www.stat.umn.edu/geyer/8054/).
+
+This site is a bit out of date.  I will redo this when I teach this
+course again in Spring 2019, including many topics from my Stat 3701 notes
+linked above, like web scraping, JSON, and SQL databases.
