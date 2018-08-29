@@ -1,0 +1,6 @@
+book_filename: "Orientation2018"
+language:
+  ui:
+    chapter_name: " "
+output_dir: "docs"
+new_session: yes
