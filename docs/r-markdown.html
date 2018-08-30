@@ -334,10 +334,12 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 ## Model 1: y ~ x
 ## Model 2: y ~ x + I(x^2)
 ## Model 3: y ~ x + I(x^2) + I(x^3)
-##   Res.Df   RSS Df Sum of Sq      F Pr(&gt;F)
-## 1     48 13838                           
-## 2     47 13824  1     14.77 0.0505 0.8231
-## 3     46 13444  1    379.69 1.2992 0.2603</code></pre>
+##   Res.Df   RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1     48 15162                              
+## 2     47 13362  1   1799.99 6.3220 0.01549 *
+## 3     46 13097  1    264.72 0.9298 0.33997  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>That is a table of sorts.</p>
 <p>In order to make that a table nicely formatted for the document we are making, first we have to figure out what the output of the R function <code>anova</code> is and capture it so we can use it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">foo &lt;-<span class="st"> </span><span class="kw">anova</span>(out1, out2, out3)
@@ -359,7 +361,7 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 <tbody>
 <tr class="odd">
 <td align="right">48</td>
-<td align="right">13838.4</td>
+<td align="right">15161.7</td>
 <td align="right"></td>
 <td align="right"></td>
 <td align="right"></td>
@@ -367,19 +369,19 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 </tr>
 <tr class="even">
 <td align="right">47</td>
-<td align="right">13823.6</td>
+<td align="right">13361.7</td>
 <td align="right">1</td>
-<td align="right">14.77</td>
-<td align="right">0.051</td>
-<td align="right">0.823</td>
+<td align="right">1799.99</td>
+<td align="right">6.322</td>
+<td align="right">0.015</td>
 </tr>
 <tr class="odd">
 <td align="right">46</td>
-<td align="right">13443.9</td>
+<td align="right">13097.0</td>
 <td align="right">1</td>
-<td align="right">379.69</td>
-<td align="right">1.299</td>
-<td align="right">0.260</td>
+<td align="right">264.72</td>
+<td align="right">0.930</td>
+<td align="right">0.340</td>
 </tr>
 </tbody>
 </table>
@@ -394,21 +396,21 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -40.066  -9.516  -1.124   7.127  34.706 
+## -47.324 -10.144   1.109  11.592  37.180 
 ## 
 ## Coefficients:
-##              Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)  5.989982  10.443885   0.574    0.569
-## x            0.017845   1.755963   0.010    0.992
-## I(x^2)       0.086571   0.079581   1.088    0.282
-## I(x^3)      -0.001170   0.001026  -1.140    0.260
+##               Estimate Std. Error t value Pr(&gt;|t|)
+## (Intercept)  7.8079911 10.3082637   0.757    0.453
+## x            1.4914816  1.7331602   0.861    0.394
+## I(x^2)      -0.0424920  0.0785475  -0.541    0.591
+## I(x^3)       0.0009768  0.0010130   0.964    0.340
 ## 
-## Residual standard error: 17.1 on 46 degrees of freedom
-## Multiple R-squared:  0.6971, Adjusted R-squared:  0.6773 
-## F-statistic: 35.29 on 3 and 46 DF,  p-value: 5.447e-12</code></pre>
-<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(0.0865714\)</span> and <span class="math inline">\(-0.0011698\)</span>. Magic!</p>
+## Residual standard error: 16.87 on 46 degrees of freedom
+## Multiple R-squared:  0.6858, Adjusted R-squared:  0.6653 
+## F-statistic: 33.46 on 3 and 46 DF,  p-value: 1.258e-11</code></pre>
+<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(-0.042492\)</span> and <span class="math inline">\(9.7677845\times 10^{-4}\)</span>. Magic!</p>
 <p>Note that these are coefficients for a regression on random data that is different every time the document is run (although wouldn’t be if we uncommented the <code>set.seed</code> command). By not using snarf-and-barf we always have the right numbers.</p>
-<p>Also note that R Markdown (in its wisdom or unwisdom) forces you to know a little bit of LaTeX. When the number needs “scientific notation” R Markdown emits LaTeX here so the number must be enclosed in dollar signs (the LaTeX math marker for in-line math). So if these weren’t enclosed in dollar signs nonsense would be printed. That coefficient of x<sup>3</sup> would come out -0.0011698 if the dollar signs were omitted.</p>
+<p>Also note that R Markdown (in its wisdom or unwisdom) forces you to know a little bit of LaTeX. When the number needs “scientific notation” R Markdown emits LaTeX here so the number must be enclosed in dollar signs (the LaTeX math marker for in-line math). So if these weren’t enclosed in dollar signs nonsense would be printed. That coefficient of x<sup>3</sup> would come out 9.767784510^{-4} if the dollar signs were omitted.</p>
 </div>
 <div id="r-chunk-options" class="section level3">
 <h3><span class="header-section-number">2.5.5</span> R Chunk Options</h3>

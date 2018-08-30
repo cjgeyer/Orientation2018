@@ -404,28 +404,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 9960
+## [1] 10582
 ## 
 ## [[2]]
-## [1] 9961
+## [1] 10583
 ## 
 ## [[3]]
-## [1] 9962
+## [1] 10584
 ## 
 ## [[4]]
-## [1] 9963
+## [1] 10585
 ## 
 ## [[5]]
-## [1] 9964
+## [1] 10586
 ## 
 ## [[6]]
-## [1] 9965
+## [1] 10587
 ## 
 ## [[7]]
-## [1] 9966
+## [1] 10588
 ## 
 ## [[8]]
-## [1] 9967</code></pre>
+## [1] 10589</code></pre>
 </div>
 <div id="parallel-streams-of-random-numbers" class="section level3">
 <h3><span class="header-section-number">3.6.3</span> Parallel Streams of Random Numbers</h3>
@@ -623,8 +623,7 @@ time4</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time1, <span class="dv">2</span>, mean)[<span class="st">&quot;elapsed&quot;</span>]</code></pre></div>
 <pre><code>##  elapsed 
 ## 9.700857</code></pre>
-<p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the</p>
-<p>computer. However, we did get a 3.6-fold speedup. If we had more cores, we could do even better.</p>
+<p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 3.6-fold speedup. If we had more cores, we could do even better.</p>
 </div>
 </div>
 <div id="the-example-with-a-cluster" class="section level2">
@@ -645,32 +644,32 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 9988
+## [1] 10610
 ## 
 ## [[2]]
-## [1] 9997
+## [1] 10619
 ## 
 ## [[3]]
-## [1] 10006
+## [1] 10628
 ## 
 ## [[4]]
-## [1] 10015
+## [1] 10637
 ## 
 ## [[5]]
-## [1] 10024
+## [1] 10646
 ## 
 ## [[6]]
-## [1] 10033
+## [1] 10655
 ## 
 ## [[7]]
-## [1] 10042
+## [1] 10664
 ## 
 ## [[8]]
-## [1] 10051</code></pre>
+## [1] 10673</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
-<li><p>first you you set up a cluster, here with <code>makePSOCKcluster</code> but not everywhere — there are a variety of different commands to make clusters and the command would be different at MSI or LATIS — and</p></li>
+<li><p>first you you set up a cluster, here with <code>makePSOCKcluster</code> but not everywhere — there are a variety of different commands to make clusters and the command would be different at LATIS or MSI — and</p></li>
 <li><p>at the end you tear down the cluster with <code>stopCluster</code>.</p></li>
 </ul>
 <p>Of course, you do not need to tear down the cluster before you are done with it. You can execute multiple <code>parLapply</code> commands on the same cluster.</p>
@@ -841,7 +840,7 @@ time5</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time1, <span class="dv">2</span>, mean)[<span class="st">&quot;elapsed&quot;</span>]</code></pre></div>
 <pre><code>##  elapsed 
 ## 9.700857</code></pre>
-<p>without parallelization. But we did not get a 4-fold speedup with 4 cores. There is a cost to sending information to and from the slave processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 2-fold speedup. If we had more slaves, we could do even better.</p>
+<p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 3.1-fold speedup. If we had more cores, we could do even better.</p>
 </div>
 </div>
 <div id="tear-down" class="section level3">

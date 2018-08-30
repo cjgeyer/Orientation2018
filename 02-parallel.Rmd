@@ -244,13 +244,13 @@ with parallelization and
 ```{r}
 apply(time1, 2, mean)["elapsed"]
 ```
+```{r echo = FALSE}
+rats <- apply(time1, 2, mean)["elapsed"] / apply(time4, 2, mean)["elapsed"]
+```
 without parallelization.  But we did not get an `r ncores`-fold speedup
 with `r ncores` cores.
 There is a cost to starting and stopping the child processes.  And some
 time needs to be taken from this number crunching to run the rest of the
-```{r echo = FALSE}
-rats <- apply(time1, 2, mean)["elapsed"] / apply(time4, 2, mean)["elapsed"]
-```
 computer.  However, we did get a `r round(rats, 1)`-fold speedup.  If we had
 more cores, we could do even better.
 
@@ -283,7 +283,7 @@ This is more complicated in that
 
  * first you you set up a cluster, here with `makePSOCKcluster` but
    not everywhere --- there are a variety of different commands to
-   make clusters and the command would be different at MSI or LATIS
+   make clusters and the command would be different at LATIS or MSI
    --- and
 
  * at the end you tear down the cluster with `stopCluster`.
@@ -387,16 +387,43 @@ with parallelization and
 ```{r}
 apply(time1, 2, mean)["elapsed"]
 ```
-without parallelization.  But we did not get a 4-fold speedup with 4 cores.
-There is a cost to sending information to and from the slave processes.
-And some
+```{r echo = FALSE}
+rats <- apply(time1, 2, mean)["elapsed"] / apply(time5, 2, mean)["elapsed"]
+```
+without parallelization.  But we did not get an `r ncores`-fold speedup
+with `r ncores` cores.
+There is a cost to starting and stopping the child processes.  And some
 time needs to be taken from this number crunching to run the rest of the
-computer.  However, we did get a 2-fold speedup.  If we had
-more slaves, we could do even better.
+computer.  However, we did get a `r round(rats, 1)`-fold speedup.  If we had
+more cores, we could do even better.
+
+We also that this method isn't as good as the other method.
+So why do we want it (other than that the other doesn't work on Windows)?
+Because it scales.  You can get clusters with thousands of cores, but
+you can't get thousands of cores in one computer.
 
 ### Tear Down
 
 Don't forget to tear down the cluster when you are done.
 ```{r}
 stopCluster(cl)
+```
+
+## LATIS and Fork-Exec
+
+We are going to just show how to do this in an interactive session.
+
+which is just like the fork-exec part of this document except for a few
+minor changes for running on LATIS.
+
+SSH into `compute.cla.umn.edu`
+
+Then
+```{r engine='bash', eval=FALSE}
+qsub -I -l nodes=1:ppn=8
+cd tmp/Orientation2018 # or wherever
+wget --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
+module load R/3.4.1
+# we are assured that a more recent version of R will be available soon
+R CMD BATCH --vanilla 02-fork-exec.R
 ```

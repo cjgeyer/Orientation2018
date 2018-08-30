@@ -1,5 +1,6 @@
-## ------------------------------------------------------------------------
-knitr::purl("02-parallel.Rmd")
+
+## where are we ???
+system("hostname -f", intern = TRUE)
 
 ## ------------------------------------------------------------------------
 # sample size
@@ -55,7 +56,11 @@ apply(time1, 2, sd) / sqrt(nrep)
 
 ## ------------------------------------------------------------------------
 library(parallel)
-ncores <- detectCores()
+# don't figure out cores on LATIS with
+# ncores <- detectCores()
+# that givuues the number of physical cores, not how many you are allowed
+# instead use
+ncores <- Sys.getenv("PBS_NP")
 mclapply(1:ncores, function(x) Sys.getpid(), mc.cores = ncores)
 
 ## ------------------------------------------------------------------------
@@ -108,57 +113,5 @@ apply(time4, 2, mean)["elapsed"]
 apply(time1, 2, mean)["elapsed"]
 
 ## ----echo = FALSE--------------------------------------------------------
-rats <- apply(time1, 2, mean)["elapsed"] / apply(time4, 2, mean)["elapsed"]
-
-## ------------------------------------------------------------------------
-library(parallel)
-ncores <- detectCores()
-cl <- makePSOCKcluster(ncores)
-parLapply(cl, 1:ncores, function(x) Sys.getpid())
-stopCluster(cl)
-
-## ------------------------------------------------------------------------
-cl <- makePSOCKcluster(ncores)
-clusterSetRNGStream(cl, 42)
-parLapply(cl, 1:ncores, function(x) rnorm(5))
-parLapply(cl, 1:ncores, function(x) rnorm(5))
-
-## ------------------------------------------------------------------------
-clusterExport(cl, c("doit", "mle", "mlogl", "n", "nsim", "theta"))
-
-## ----cache=TRUE----------------------------------------------------------
-pout <- parLapply(cl, rep(nsim / ncores, ncores), doit, estimator = mle)
-
-## ------------------------------------------------------------------------
-length(pout)
-sapply(pout, length)
-lapply(pout, head)
-lapply(pout, range)
-
-## ----fig.align='center'--------------------------------------------------
-theta.hat <- unlist(mout)
-hist(theta.hat, probability = TRUE, breaks = 30)
-curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
-
-## ----cache=TRUE----------------------------------------------------------
-time5 <- NULL
-for (irep in 1:nrep)
-    time5 <- rbind(time5, system.time(theta.hat.mle <-
-        unlist(parLapply(cl, rep(nsim / ncores, ncores),
-            doit, estimator = mle))))
-time5
-apply(time5, 2, mean)
-apply(time5, 2, sd) / sqrt(nrep)
-
-## ------------------------------------------------------------------------
-apply(time5, 2, mean)["elapsed"]
-
-## ------------------------------------------------------------------------
-apply(time1, 2, mean)["elapsed"]
-
-## ----echo = FALSE--------------------------------------------------------
-rats <- apply(time1, 2, mean)["elapsed"] / apply(time5, 2, mean)["elapsed"]
-
-## ------------------------------------------------------------------------
-stopCluster(cl)
+apply(time1, 2, mean)["elapsed"] / apply(time4, 2, mean)["elapsed"]
 
