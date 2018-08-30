@@ -1,4 +1,402 @@
 
 # Parallel Computing in R
 
-Foo!
+## R Markdown Source
+
+https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-parallel.Rmd
+
+## Just the R from the R Markdown Source
+
+To get just the R chunks from R Markdown do (in R)
+```{r}
+knitr::purl("02-parallel.Rmd")
+```
+
+https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-parallel.R
+
+## Introduction
+
+The example that we will use throughout this document
+is simulating the sampling distribution of the MLE
+for $\text{Normal}(\theta, \theta^2)$ data.
+
+A lot of this may make make no sense.  This is what you are going to graduate
+school in statistics to learn.  But we want a non-toy example.
+
+## Set-Up
+
+```{r}
+# sample size
+n <- 10
+# simulation sample size
+nsim <- 1e4
+# true unknown parameter value
+# of course in the simulation it is known, but we pretend we don't
+# know it and estimate it
+theta <- 1
+
+doit <- function(estimator, seed = 42) {
+    set.seed(seed)
+    result <- double(nsim)
+    for (i in 1:nsim) {
+        x <- rnorm(n, theta, abs(theta))
+        result[i] <- estimator(x)
+    }
+    return(result)
+}
+
+mlogl <- function(theta, x) sum(- dnorm(x, theta, abs(theta), log = TRUE))
+
+mle <- function(x) {
+    if (all(x == 0))
+        return(0)
+    nout <- nlm(mlogl, sign(mean(x)) * sd(x), x = x)
+    while (nout$code > 3)
+        nout <- nlm(mlogl, nout$estimate, x = x)
+    return(nout$estimate)
+}
+```
+
+ * R function `doit` simulates `nsim` datasets, applies an estimator
+   supplied as an argument to the function to each, and returns the
+   vector of results.
+
+ * R function `mlogl` is minus the log likelihood of the model in question.
+   We could easily change the code to do another model by changing only
+   this function.  (When the code mimics the math, the design is usually good.)
+
+ * R function `mle` calculates the estimator by calling R function `nlm` to
+   minimize it.  The `while` loop is because `nlm` may fail to converge with
+   the default arguments.  The starting value `sign(mean(x)) * sd(x)` is a
+   reasonable estimator because the mean is $\theta$ and the variance
+   is $\theta^2$, so `mean(x)` is one estimator of $\theta$ and `sd(x)` is
+   an estimator of $\lvert \theta \rvert$.
+
+## Doing the Simulation without Parallelization
+
+### Try It
+
+```{r}
+theta.hat <- doit(mle)
+```
+
+### Check It
+
+```{r fig.align='center'}
+hist(theta.hat, probability = TRUE, breaks = 30)
+curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
+```
+
+The curve is the PDF of the asymptotic normal distribution of the MLE,
+which uses the formula
+$$
+   I_n(\theta) = \frac{3 n}{\theta^2}
+$$
+which you will learn how to calculate when you take a theory course
+(if you don't already know).
+
+Looks pretty good.  The large negative estimates are probably not a mistake.
+The parameter is allowed to be negative, so sometimes the estimates come
+out negative even though the truth is positive.  And not just a little
+negative because $\lvert \theta \rvert$ is also the standard deviation,
+so it cannot be small and the model fit the data.
+
+### Time It
+
+Now for something new.  We will time it.
+```{r cache=TRUE}
+time1 <- system.time(theta.hat.mle <- doit(mle))
+time1
+```
+
+### Time It More Accurately
+
+That's too short a time for accurate timing.  Also we should probably average
+over several IID iterations to get a good average.  Try again.
+```{r cache=TRUE}
+nsim <- 1e5
+nrep <- 7
+time1 <- NULL
+for (irep in 1:nrep)
+    time1 <- rbind(time1, system.time(theta.hat.mle <- doit(mle)))
+time1
+apply(time1, 2, mean)
+apply(time1, 2, sd) / sqrt(nrep)
+```
+
+## Parallel Computing With Unix Fork and Exec
+
+### Introduction
+
+This method is by far the simplest but
+
+ * it only works on one computer (using however many simultaneous processes
+   the computer can do), and
+
+ * it does not work on Windows.
+
+### Toy Problem
+
+First a toy problem that does nothing except show that we are actually
+using different processes.
+```{r}
+library(parallel)
+ncores <- detectCores()
+mclapply(1:ncores, function(x) Sys.getpid(), mc.cores = ncores)
+```
+
+### Parallel Streams of Random Numbers
+
+To get random numbers in parallel, we need to use a special
+random number generator (RNG) designed for parallelization.
+
+```{r}
+RNGkind("L'Ecuyer-CMRG")
+set.seed(42)
+mclapply(1:ncores, function(x) rnorm(5), mc.cores = ncores)
+set.seed(42)
+mclapply(1:ncores, function(x) rnorm(5), mc.cores = ncores)
+```
+Just right!
+We have different random numbers in all our jobs.
+And it is reproducible.
+ 
+But this may not work like you may think it does.
+If we do it again we get exactly the same results.
+Running `mclapply` does not change `.Random.seed` in the parent process
+(the R process you are typing into).  It only changes it in the child
+processes (that do the work).  But there is no communication from child
+to parent *except* the list of results returned by `mclapply`.
+
+This is a fundamental problem with `mclapply` and the fork-exec method
+of parallelization.  And it has no real solution.
+You just have to be aware of it.
+
+If you want to do exactly the same random thing with `mclapply`
+and get different random results, then you must change `.Random.seed`
+in the parent process, either with `set.seed` or by otherwise using
+random numbers *in the parent process*.
+
+### The Example {#fork-example}
+
+We need to rewrite our `doit` function
+
+ * to only do `1 / ncores` of the work in each child process,
+
+ * to not set the random number generator seed, and
+
+ * to take an argument in some list we provide.
+
+```{r}
+doit <- function(nsim, estimator) {
+    result <- double(nsim)
+    for (i in 1:nsim) {
+        x <- rnorm(n, theta, abs(theta))
+        result[i] <- estimator(x)
+    }
+    return(result)
+}
+```
+
+### Try It {#fork-try}
+
+```{r cache=TRUE}
+mout <- mclapply(rep(nsim / ncores, ncores), doit,
+    estimator = mle, mc.cores = ncores)
+lapply(mout, head)
+```
+
+### Check It {#fork-check}
+
+Seems to have worked.
+```{r}
+length(mout)
+sapply(mout, length)
+lapply(mout, head)
+lapply(mout, range)
+```
+
+Plot it.
+```{r fig.align='center'}
+theta.hat <- unlist(mout)
+hist(theta.hat, probability = TRUE, breaks = 30)
+curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
+```
+
+### Time It {#fork-time}
+
+```{r cache=TRUE}
+time4 <- NULL
+for (irep in 1:nrep)
+    time4 <- rbind(time4, system.time(theta.hat.mle <-
+        unlist(mclapply(rep(nsim / ncores, ncores), doit,
+            estimator = mle, mc.cores = ncores))))
+time4
+apply(time4, 2, mean)
+apply(time4, 2, sd) / sqrt(nrep)
+```
+
+We got the desired speedup.  The elapsed time averages
+```{r}
+apply(time4, 2, mean)["elapsed"]
+```
+with parallelization and
+```{r}
+apply(time1, 2, mean)["elapsed"]
+```
+without parallelization.  But we did not get an `r ncores`-fold speedup
+with `r ncores` cores.
+There is a cost to starting and stopping the child processes.  And some
+time needs to be taken from this number crunching to run the rest of the
+```{r echo = FALSE}
+rats <- apply(time1, 2, mean)["elapsed"] / apply(time4, 2, mean)["elapsed"]
+```
+computer.  However, we did get a `r round(rats, 1)`-fold speedup.  If we had
+more cores, we could do even better.
+
+## The Example With a Cluster
+
+### Introduction
+
+This method is more complicated but
+
+ * it works on clusters like the ones at
+[LATIS (College of Liberal Arts Technologies and Innovation
+Services](http://z.umn.edu/claresearchcomputing) or at the
+[Minnesota Supercomputing Institute](https://www.msi.umn.edu/).
+
+ * according to the documentation, it does work on Windows.
+
+### Toy Problem
+
+First a toy problem that does nothing except show that we are actually
+using different processes.
+```{r}
+library(parallel)
+ncores <- detectCores()
+cl <- makePSOCKcluster(ncores)
+parLapply(cl, 1:ncores, function(x) Sys.getpid())
+stopCluster(cl)
+```
+
+This is more complicated in that
+
+ * first you you set up a cluster, here with `makePSOCKcluster` but
+   not everywhere --- there are a variety of different commands to
+   make clusters and the command would be different at MSI or LATIS
+   --- and
+
+ * at the end you tear down the cluster with `stopCluster`.
+
+Of course, you do not need to tear down the cluster before you are
+done with it.  You can execute multiple `parLapply` commands on the
+same cluster.
+
+There are also a lot of other commands other than `parLapply` that
+can be used on the cluster.  We will see some of them below.
+
+### Parallel Streams of Random Numbers {#rng-cluster}
+
+```{r}
+cl <- makePSOCKcluster(ncores)
+clusterSetRNGStream(cl, 42)
+parLapply(cl, 1:ncores, function(x) rnorm(5))
+parLapply(cl, 1:ncores, function(x) rnorm(5))
+```
+
+We see that clusters do not have the same problem with continuing
+random number streams that the fork-exec mechanism has.
+
+ * Using fork-exec there is a *parent* process and *child* processes
+   (all running on the same computer) and the *child* processes end
+   when their work is done (when `mclapply` finishes).
+
+ * Using clusters there is a *master* process and *slave* processes
+   (possibly running on many different computers) and the *slave*
+   processes end when the cluster is torn down (with `stopCluster`).
+
+So the slave processes continue and remember where they are in the
+random number stream.
+
+### The Example on a Cluster
+
+#### Set Up {#cluster-setup}
+
+Another complication of using clusters is that the slave processes
+are completely independent of the master.  Any information they have
+must be explicitly passed to them.
+
+This is very unlike the fork-exec model in which all of the child processes
+are copies of the parent process inheriting all of its memory (and thus
+knowing about any and all R objects it created).
+
+So in order for our example to work we must explicitly distribute stuff
+to the cluster.
+```{r}
+clusterExport(cl, c("doit", "mle", "mlogl", "n", "nsim", "theta"))
+```
+
+Now all of the slaves have those R objects, as copied from the master
+process right now.  If we change them in the master (pedantically if
+we change the R objects those *names* refer to) the slaves won't know
+about it.  They only would make changes if code were executed on them
+to do so.
+
+#### Try It {#cluster-try}
+
+So now we are set up to try our example.
+```{r cache=TRUE}
+pout <- parLapply(cl, rep(nsim / ncores, ncores), doit, estimator = mle)
+```
+
+#### Check It {#cluster-check}
+
+Seems to have worked.
+```{r}
+length(pout)
+sapply(pout, length)
+lapply(pout, head)
+lapply(pout, range)
+```
+
+Plot it.
+```{r fig.align='center'}
+theta.hat <- unlist(mout)
+hist(theta.hat, probability = TRUE, breaks = 30)
+curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
+```
+
+#### Time It {#cluster-time}
+
+```{r cache=TRUE}
+time5 <- NULL
+for (irep in 1:nrep)
+    time5 <- rbind(time5, system.time(theta.hat.mle <-
+        unlist(parLapply(cl, rep(nsim / ncores, ncores),
+            doit, estimator = mle))))
+time5
+apply(time5, 2, mean)
+apply(time5, 2, sd) / sqrt(nrep)
+```
+
+We got the desired speedup.  The elapsed time averages
+```{r}
+apply(time5, 2, mean)["elapsed"]
+```
+with parallelization and
+```{r}
+apply(time1, 2, mean)["elapsed"]
+```
+without parallelization.  But we did not get a 4-fold speedup with 4 cores.
+There is a cost to sending information to and from the slave processes.
+And some
+time needs to be taken from this number crunching to run the rest of the
+computer.  However, we did get a 2-fold speedup.  If we had
+more slaves, we could do even better.
+
+### Tear Down
+
+Don't forget to tear down the cluster when you are done.
+```{r}
+stopCluster(cl)
+```
