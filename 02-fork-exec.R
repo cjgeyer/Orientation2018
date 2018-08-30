@@ -34,31 +34,10 @@ mle <- function(x) {
 }
 
 ## ------------------------------------------------------------------------
-theta.hat <- doit(mle)
-
-## ----fig.align='center'--------------------------------------------------
-hist(theta.hat, probability = TRUE, breaks = 30)
-curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
-
-## ----cache=TRUE----------------------------------------------------------
-time1 <- system.time(theta.hat.mle <- doit(mle))
-time1
-
-## ----cache=TRUE----------------------------------------------------------
-nsim <- 1e5
-nrep <- 7
-time1 <- NULL
-for (irep in 1:nrep)
-    time1 <- rbind(time1, system.time(theta.hat.mle <- doit(mle)))
-time1
-apply(time1, 2, mean)
-apply(time1, 2, sd) / sqrt(nrep)
-
-## ------------------------------------------------------------------------
 library(parallel)
 # don't figure out cores on LATIS with
 # ncores <- detectCores()
-# that givuues the number of physical cores, not how many you are allowed
+# that gives the number of physical cores, not how many you are allowed
 # instead use
 ncores <- Sys.getenv("PBS_NP")
 mclapply(1:ncores, function(x) Sys.getpid(), mc.cores = ncores)
@@ -108,10 +87,4 @@ apply(time4, 2, sd) / sqrt(nrep)
 
 ## ------------------------------------------------------------------------
 apply(time4, 2, mean)["elapsed"]
-
-## ------------------------------------------------------------------------
-apply(time1, 2, mean)["elapsed"]
-
-## ----echo = FALSE--------------------------------------------------------
-apply(time1, 2, mean)["elapsed"] / apply(time4, 2, mean)["elapsed"]
 
