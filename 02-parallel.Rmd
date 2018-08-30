@@ -5,15 +5,6 @@
 
 https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-parallel.Rmd
 
-## Just the R from the R Markdown Source
-
-To get just the R chunks from R Markdown do (in R)
-```{r}
-knitr::purl("02-parallel.Rmd")
-```
-
-https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-parallel.R
-
 ## Introduction
 
 The example that we will use throughout this document
@@ -25,7 +16,7 @@ school in statistics to learn.  But we want a non-toy example.
 
 ## Set-Up
 
-```{r}
+```{r "code", cache=TRUE}
 # sample size
 n <- 10
 # simulation sample size
@@ -48,11 +39,12 @@ doit <- function(estimator, seed = 42) {
 mlogl <- function(theta, x) sum(- dnorm(x, theta, abs(theta), log = TRUE))
 
 mle <- function(x) {
-    if (all(x == 0))
+    theta.start <- sign(mean(x)) * sd(x)
+    if (all(x == 0) || theta.start == 0)
         return(0)
-    nout <- nlm(mlogl, sign(mean(x)) * sd(x), x = x)
-    while (nout$code > 3)
-        nout <- nlm(mlogl, nout$estimate, x = x)
+    nout <- nlm(mlogl, theta.start, iterlim = 1000, x = x)
+    if (nout$code > 3)
+        return(NaN)
     return(nout$estimate)
 }
 ```
@@ -66,11 +58,10 @@ mle <- function(x) {
    this function.  (When the code mimics the math, the design is usually good.)
 
  * R function `mle` calculates the estimator by calling R function `nlm` to
-   minimize it.  The `while` loop is because `nlm` may fail to converge with
-   the default arguments.  The starting value `sign(mean(x)) * sd(x)` is a
-   reasonable estimator because the mean is $\theta$ and the variance
-   is $\theta^2$, so `mean(x)` is one estimator of $\theta$ and `sd(x)` is
-   an estimator of $\lvert \theta \rvert$.
+   minimize it.  The starting value, either `sign(mean(x)) * sd(x)` is a
+   reasonable estimator because `mean(x)` is a consistent estimator
+   of $\theta$ and `sd(x)` is a consistent estimator of
+   $\lvert \theta \rvert$.
 
 ## Doing the Simulation without Parallelization
 
@@ -100,11 +91,17 @@ The parameter is allowed to be negative, so sometimes the estimates come
 out negative even though the truth is positive.  And not just a little
 negative because $\lvert \theta \rvert$ is also the standard deviation,
 so it cannot be small and the model fit the data.
+```{r}
+sum(is.na(theta.hat))
+mean(is.na(theta.hat))
+sum(theta.hat < 0, na.rm = TRUE)
+mean(theta.hat < 0, na.rm = TRUE)
+```
 
 ### Time It
 
 Now for something new.  We will time it.
-```{r cache=TRUE}
+```{r cache=TRUE, dependson="code"}
 time1 <- system.time(theta.hat.mle <- doit(mle))
 time1
 ```
@@ -113,7 +110,7 @@ time1
 
 That's too short a time for accurate timing.  Also we should probably average
 over several IID iterations to get a good average.  Try again.
-```{r cache=TRUE}
+```{r cache=TRUE, dependson="code"}
 nsim <- 1e5
 nrep <- 7
 time1 <- NULL
@@ -187,7 +184,7 @@ We need to rewrite our `doit` function
 
  * to take an argument in some list we provide.
 
-```{r}
+```{r "code-too", cache=TRUE}
 doit <- function(nsim, estimator) {
     result <- double(nsim)
     for (i in 1:nsim) {
@@ -200,7 +197,7 @@ doit <- function(nsim, estimator) {
 
 ### Try It {#fork-try}
 
-```{r cache=TRUE}
+```{r cache=TRUE, dependson=c("code","code-too")}
 mout <- mclapply(rep(nsim / ncores, ncores), doit,
     estimator = mle, mc.cores = ncores)
 lapply(mout, head)
@@ -213,7 +210,6 @@ Seems to have worked.
 length(mout)
 sapply(mout, length)
 lapply(mout, head)
-lapply(mout, range)
 ```
 
 Plot it.
@@ -225,7 +221,7 @@ curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
 
 ### Time It {#fork-time}
 
-```{r cache=TRUE}
+```{r cache=TRUE, dependson=c("code","code-too")}
 time4 <- NULL
 for (irep in 1:nrep)
     time4 <- rbind(time4, system.time(theta.hat.mle <-
@@ -345,7 +341,7 @@ to do so.
 #### Try It {#cluster-try}
 
 So now we are set up to try our example.
-```{r cache=TRUE}
+```{r cache=TRUE, dependson=c("code","code-too")}
 pout <- parLapply(cl, rep(nsim / ncores, ncores), doit, estimator = mle)
 ```
 
@@ -356,7 +352,6 @@ Seems to have worked.
 length(pout)
 sapply(pout, length)
 lapply(pout, head)
-lapply(pout, range)
 ```
 
 Plot it.
@@ -368,7 +363,7 @@ curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
 
 #### Time It {#cluster-time}
 
-```{r cache=TRUE}
+```{r cache=TRUE, dependson=c("code","code-too")}
 time5 <- NULL
 for (irep in 1:nrep)
     time5 <- rbind(time5, system.time(theta.hat.mle <-

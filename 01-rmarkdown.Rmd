@@ -123,21 +123,24 @@ But for today, we'll use RStudio.
 
  * On the File menu
 
-   + select "New File"
+     + select "New File"
 
-   + then select "R Markdown"
+     + then select "R Markdown"
 
-     - and in the window that comes up fill in a title and author
+         - and in the dialog that pops up fill in a title and author
 
-     - and click the "OK" button
+         - and click the "OK" button
 
 You now should have a toy R Markdown document in the upper left panel
 of the RStudio app.  Now
 
  * click the button labeled "knit" having a yarn and needles icon
 
- * and in the window that pops up give it a file name and location
+ * and in the dialog that pops up give it a file name and location
    for where to save the file
+
+     **Caution!** The extension of the file must be `Rmd` or `rmd`
+     because RStudio refuses to process it otherwise.
 
  * and then the rendered document should show up in the lower right panel
    or in a pop up
@@ -238,7 +241,7 @@ anova(out1, out2, out3)
 That is a table of sorts.
 
 In order to make that a table nicely formatted for the document
-we are making, first we have to figure out what the output of the R function
+we are making, first we have to figure out what the output of R function
 `anova` is and capture it so we can use it.
 ```{r}
 foo <- anova(out1, out2, out3)
@@ -298,7 +301,7 @@ hide
 ```
 
 Any knitr chunk option found at https://yihui.name/knitr/options/
-can be use as an R Markdown chunk option (knitr underlies rmarkdown).
+can be used as an R Markdown chunk option (knitr underlies rmarkdown).
 
 Another useful option is `cache = TRUE`.  That will be illustrated in
 the next chapter.

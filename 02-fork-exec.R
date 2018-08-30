@@ -25,11 +25,12 @@ doit <- function(estimator, seed = 42) {
 mlogl <- function(theta, x) sum(- dnorm(x, theta, abs(theta), log = TRUE))
 
 mle <- function(x) {
-    if (all(x == 0))
+    theta.start <- sign(mean(x)) * sd(x)
+    if (all(x == 0) || theta.start == 0)
         return(0)
-    nout <- nlm(mlogl, sign(mean(x)) * sd(x), x = x)
-    while (nout$code > 3)
-        nout <- nlm(mlogl, nout$estimate, x = x)
+    nout <- nlm(mlogl, theta.start, iterlim = 1000, x = x)
+    if (nout$code > 3)
+        return(NaN)
     return(nout$estimate)
 }
 

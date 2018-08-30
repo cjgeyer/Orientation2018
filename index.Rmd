@@ -84,7 +84,9 @@ If can also be found [on-line at CRAN](https://cloud.r-project.org/doc/manuals/r
 
 [PDF and e-book versions are also available at CRAN](https://cloud.r-project.org/manuals.html).
 
-There are five other manuals that come with R, but they are for experts.
+On the web page `help.start()` gives you or
+at the link just above you see there are also
+five other manuals that come with R, but they are for experts.
 You don't want to read them yet.
 
 ### An R Short Course
@@ -108,6 +110,7 @@ Of particular interest are the
 Your humble author taught Stat 8054 (PhD level statistical computing).
 [Here is the web site for that](http://www.stat.umn.edu/geyer/8054/).
 
-This site is a bit out of date.  I will redo this when I teach this
+That site is a bit out of date.  I will redo it when I teach that
 course again in Spring 2019, including many topics from my Stat 3701 notes
 linked above, like web scraping, JSON, and SQL databases.
+And I will update many topics, like parallel computing.
