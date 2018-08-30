@@ -417,7 +417,8 @@ Then
 ```{r engine='bash', eval=FALSE}
 qsub -I -l nodes=1:ppn=8
 cd tmp/Orientation2018 # or wherever
-wget --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
+rm -f 02-fork-exec.R
+wget https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
 module load R/3.4.1
 # we are assured that a more recent version of R will be available soon
 R CMD BATCH --vanilla 02-fork-exec.R
@@ -435,7 +436,8 @@ Almost the same thing again
 ```{r engine='bash', eval=FALSE}
 qsub -I -l nodes=1:ppn=8
 cd tmp/Orientation2018 # or wherever
-wget --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
+rm -f 02-cluster.R
+wget https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
 module load R/3.4.1
 # we are assured that a more recent version of R will be available soon
 R CMD BATCH --vanilla 02-cluster.R

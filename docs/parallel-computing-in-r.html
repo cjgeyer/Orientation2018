@@ -300,28 +300,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 30126
+## [1] 31448
 ## 
 ## [[2]]
-## [1] 30127
+## [1] 31449
 ## 
 ## [[3]]
-## [1] 30128
+## [1] 31450
 ## 
 ## [[4]]
-## [1] 30129
+## [1] 31451
 ## 
 ## [[5]]
-## [1] 30130
+## [1] 31452
 ## 
 ## [[6]]
-## [1] 30131
+## [1] 31453
 ## 
 ## [[7]]
-## [1] 30132
+## [1] 31454
 ## 
 ## [[8]]
-## [1] 30133</code></pre>
+## [1] 31455</code></pre>
 </div>
 <div id="parallel-streams-of-random-numbers" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Parallel Streams of Random Numbers</h3>
@@ -516,28 +516,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 30247
+## [1] 31476
 ## 
 ## [[2]]
-## [1] 30256
+## [1] 31485
 ## 
 ## [[3]]
-## [1] 30265
+## [1] 31494
 ## 
 ## [[4]]
-## [1] 30274
+## [1] 31503
 ## 
 ## [[5]]
-## [1] 30283
+## [1] 31512
 ## 
 ## [[6]]
-## [1] 30292
+## [1] 31521
 ## 
 ## [[7]]
-## [1] 30301
+## [1] 31530
 ## 
 ## [[8]]
-## [1] 30310</code></pre>
+## [1] 31539</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -706,7 +706,8 @@ time5</code></pre></div>
 <p>Then</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
-<span class="fu">wget</span> --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
+<span class="fu">rm</span> -f 02-fork-exec.R
+<span class="fu">wget</span> https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
 <span class="ex">module</span> load R/3.4.1
 <span class="co"># we are assured that a more recent version of R will be available soon</span>
 <span class="ex">R</span> CMD BATCH --vanilla 02-fork-exec.R
@@ -721,7 +722,8 @@ time5</code></pre></div>
 <p>Almost the same thing again</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
-<span class="fu">wget</span> --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
+<span class="fu">rm</span> -f 02-cluster.R
+<span class="fu">wget</span> https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
 <span class="ex">module</span> load R/3.4.1
 <span class="co"># we are assured that a more recent version of R will be available soon</span>
 <span class="ex">R</span> CMD BATCH --vanilla 02-cluster.R
