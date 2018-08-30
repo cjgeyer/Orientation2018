@@ -6,7 +6,7 @@ system("hostname -f", intern = TRUE)
 # sample size
 n <- 10
 # simulation sample size
-nsim <- 1e4
+nsim <- 1e5
 # true unknown parameter value
 # of course in the simulation it is known, but we pretend we don't
 # know it and estimate it
@@ -76,6 +76,7 @@ hist(theta.hat, probability = TRUE, breaks = 30)
 curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
 
 ## ----cache=TRUE----------------------------------------------------------
+nrep <- 7
 time4 <- NULL
 for (irep in 1:nrep)
     time4 <- rbind(time4, system.time(theta.hat.mle <-
