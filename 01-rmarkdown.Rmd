@@ -59,12 +59,16 @@ type commands into a file, say `foo.R` and use
 ```{r engine='bash', eval=FALSE}
 R CMD BATCH --vanilla foo.R
 ```
-to run R to do the analysis.
+to run R (from the operating system command line) to do the analysis.
 
-There are several ways experts use literate programming R.
+There are several ways experts use literate programming with R.
 Type commands with explanations into an R Markdown file, and render it
 in a clean R environment (empty global environment).  Either start R
-with a clean global environment (with `R --vanilla`) and do
+with a clean global environment via
+```{r engine='bash', eval=FALSE}
+R --vanilla
+```
+and do
 ```{r eval=FALSE}
 library(rmarkdown)
 render("foo.Rmd")
@@ -130,13 +134,13 @@ But for today, we'll use RStudio.
 You now should have a toy R Markdown document in the upper left panel
 of the RStudio app.  Now
 
- * Click the button labeled "knit" having a yarn and needles icon.
+ * click the button labeled "knit" having a yarn and needles icon
 
  * and in the window that pops up give it a file name and location
-   for where to save the file.
+   for where to save the file
 
  * and then the rendered document should show up in the lower right panel
-   or in a pop up.
+   or in a pop up
 
 
 We're in business!  We have done R Markdown!
@@ -170,6 +174,8 @@ Things to try in your toy document
 
 ## Syntax Involving R
 
+### Code Chunks
+
 In your toy document RStudio already gives you two code chunks
 (R that is executed when the document is rendered and the output stuffed
 in the document).  One does a summary and the other a plot.
@@ -183,6 +189,120 @@ is rendered, R executes the code producing new results.  If you change
 the code, the results also change (unlike what happens if you snarf-and-barf
 code and results).
 
+### Plots
+
 The toy document RStudio provides shows a plot using R base graphics,
 here is another using R package `ggplot2`.
+```{r fig.align='center', label='histogram', fig.cap='Histogram with probability density function.'}
+# set.seed(42) # uncomment to always get the same plot
+# for ggplot all data must be in data frame
+mydata <- data.frame(x = rnorm(1000))
+library(ggplot2)
+ggplot(mydata, aes(x)) +
+    geom_histogram(aes(y = ..density..), binwidth = 0.5,
+        fill = "cornsilk", color = "black") +
+    stat_function(fun = dnorm, color = "maroon")
+```
 
+The analog with base graphics doesn't work as well because it is two commands
+that don't talk to each other.
+```{r fig.align='center', label='histogram-too', fig.cap='Histogram with probability density function (base graphics).'}
+# for base graphics we don't need data in data frames
+x <- mydata$x
+hist(x, probability = TRUE)
+curve(dnorm(x), add = TRUE)
+```
+
+### Tables
+ 
+The no-snarf-and-barf rule means we have to use R to construct all our
+tables.  To see how to do that, first we need a table.
+
+Make up some regression data.
+```{r}
+n <- 50
+x <- seq(1, n)
+a.true <- 3
+b.true <- 1.5
+y.true <- a.true + b.true * x
+s.true <- 17.3
+y <- y.true + s.true * rnorm(n)
+```
+And fit some models to it.
+```{r}
+out1 <- lm(y ~ x)
+out2 <- lm(y ~ x + I(x^2))
+out3 <- lm(y ~ x + I(x^2) + I(x^3))
+anova(out1, out2, out3)
+```
+That is a table of sorts.
+
+In order to make that a table nicely formatted for the document
+we are making, first we have to figure out what the output of the R function
+`anova` is and capture it so we can use it.
+```{r}
+foo <- anova(out1, out2, out3)
+class(foo)
+```
+
+It is a data frame, which is the easiest thing to turn into a table,
+and the simplest way to do that seems to be the `kable` option on
+our R chunk
+```{r kable, echo = FALSE}
+options(knitr.kable.NA = '')
+knitr::kable(foo, caption = "ANOVA Table", digits = c(0, 1, 0, 2, 3, 3))
+```
+
+### In-Line R
+
+You can also execute R not in a code chunk but just in-line in your
+writing.  Here is an example of that.
+First let's get some computation we want to quote.
+```{r}
+summary(out3)
+```
+
+The coefficients for x^2^ and x^3^ are not statistically significant,
+as shown by the ANOVA table.
+What they actually were was
+$`r out3$coef[3]`$
+and
+$`r out3$coef[4]`$.
+Magic!
+
+Note that these are coefficients for a regression on random data that
+is different every time the document is run (although wouldn't be if
+we uncommented the `set.seed` command).  By not using snarf-and-barf
+we always have the right numbers.
+
+Also note that R Markdown (in its wisdom or unwisdom) forces you to know
+a little bit of LaTeX.  When the number needs "scientific notation" R
+Markdown emits LaTeX here so the number must be enclosed in dollar signs
+(the LaTeX math marker for in-line math).  So if these weren't enclosed
+in dollar signs nonsense would be printed.
+That coefficient of x^3^ would come out
+`r out3$coef[4]`
+if the dollar signs were omitted.
+
+
+### R Chunk Options
+
+We have already illustrated a few R chunk options.
+
+Another useful one is `echo = FALSE`.  In this paragraph there is
+such a code chunk, but you don't see it.
+```{r echo=FALSE}
+hide <- 2 * pi
+```
+That is, you don't see it unless you look at the source.
+
+But we can use it in another code chunk.
+```{r}
+hide
+```
+
+Any knitr chunk option found at https://yihui.name/knitr/options/
+can be use as an R Markdown chunk option (knitr underlies rmarkdown).
+
+Another useful option is `cache = TRUE`.  That will be illustrated in
+the next chapter.

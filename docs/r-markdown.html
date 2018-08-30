@@ -118,7 +118,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="r-markdown.html"><a href="r-markdown.html#getting-started"><i class="fa fa-check"></i><b>2.3</b> Getting Started</a></li>
 <li class="chapter" data-level="2.4" data-path="r-markdown.html"><a href="r-markdown.html#syntax-not-involving-r"><i class="fa fa-check"></i><b>2.4</b> Syntax not Involving R</a></li>
-<li class="chapter" data-level="2.5" data-path="r-markdown.html"><a href="r-markdown.html#syntax-involving-r"><i class="fa fa-check"></i><b>2.5</b> Syntax Involving R</a></li>
+<li class="chapter" data-level="2.5" data-path="r-markdown.html"><a href="r-markdown.html#syntax-involving-r"><i class="fa fa-check"></i><b>2.5</b> Syntax Involving R</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="r-markdown.html"><a href="r-markdown.html#code-chunks"><i class="fa fa-check"></i><b>2.5.1</b> Code Chunks</a></li>
+<li class="chapter" data-level="2.5.2" data-path="r-markdown.html"><a href="r-markdown.html#plots"><i class="fa fa-check"></i><b>2.5.2</b> Plots</a></li>
+<li class="chapter" data-level="2.5.3" data-path="r-markdown.html"><a href="r-markdown.html#tables"><i class="fa fa-check"></i><b>2.5.3</b> Tables</a></li>
+<li class="chapter" data-level="2.5.4" data-path="r-markdown.html"><a href="r-markdown.html#in-line-r"><i class="fa fa-check"></i><b>2.5.4</b> In-Line R</a></li>
+<li class="chapter" data-level="2.5.5" data-path="r-markdown.html"><a href="r-markdown.html#r-chunk-options"><i class="fa fa-check"></i><b>2.5.5</b> R Chunk Options</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html"><i class="fa fa-check"></i><b>3</b> Parallel Computing in R</a></li>
 <li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a></li>
@@ -178,8 +184,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3><span class="header-section-number">2.2.3</span> Expert Data Analysis</h3>
 <p>The way experts use plain R is to type commands into a file, say <code>foo.R</code> and use</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">R</span> CMD BATCH --vanilla foo.R</code></pre></div>
-<p>to run R to do the analysis.</p>
-<p>There are several ways experts use literate programming R. Type commands with explanations into an R Markdown file, and render it in a clean R environment (empty global environment). Either start R with a clean global environment (with <code>R --vanilla</code>) and do</p>
+<p>to run R (from the operating system command line) to do the analysis.</p>
+<p>There are several ways experts use literate programming with R. Type commands with explanations into an R Markdown file, and render it in a clean R environment (empty global environment). Either start R with a clean global environment via</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">R</span> --vanilla</code></pre></div>
+<p>and do</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(rmarkdown)
 <span class="kw">render</span>(<span class="st">&quot;foo.Rmd&quot;</span>)</code></pre></div>
 <p>or start RStudio with a clean global environment (on the “Tools” menu, select “Global Options” and uncheck “Restore .RData into workspace at startup”, then close and restart) load the R Markdown file and click “Knit”.</p>
@@ -217,9 +225,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <p>You now should have a toy R Markdown document in the upper left panel of the RStudio app. Now</p>
 <ul>
-<li><p>Click the button labeled “knit” having a yarn and needles icon.</p></li>
-<li><p>and in the window that pops up give it a file name and location for where to save the file.</p></li>
-<li><p>and then the rendered document should show up in the lower right panel or in a pop up.</p></li>
+<li><p>click the button labeled “knit” having a yarn and needles icon</p></li>
+<li><p>and in the window that pops up give it a file name and location for where to save the file</p></li>
+<li><p>and then the rendered document should show up in the lower right panel or in a pop up</p></li>
 </ul>
 <p>We’re in business! We have done R Markdown!</p>
 <p>As we go along we can try things.</p>
@@ -241,13 +249,154 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="syntax-involving-r" class="section level2">
 <h2><span class="header-section-number">2.5</span> Syntax Involving R</h2>
+<div id="code-chunks" class="section level3">
+<h3><span class="header-section-number">2.5.1</span> Code Chunks</h3>
 <p>In your toy document RStudio already gives you two code chunks (R that is executed when the document is rendered and the output stuffed in the document). One does a summary and the other a plot.</p>
 <p>Here’s a trivial code chunk</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">2</span></code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <p>Note that the result is not in the document source. Every time the document is rendered, R executes the code producing new results. If you change the code, the results also change (unlike what happens if you snarf-and-barf code and results).</p>
+</div>
+<div id="plots" class="section level3">
+<h3><span class="header-section-number">2.5.2</span> Plots</h3>
 <p>The toy document RStudio provides shows a plot using R base graphics, here is another using R package <code>ggplot2</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set.seed(42) # uncomment to always get the same plot</span>
+<span class="co"># for ggplot all data must be in data frame</span>
+mydata &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="kw">rnorm</span>(<span class="dv">1000</span>))
+<span class="kw">library</span>(ggplot2)
+<span class="kw">ggplot</span>(mydata, <span class="kw">aes</span>(x)) <span class="op">+</span>
+<span class="st">    </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">y =</span> ..density..), <span class="dt">binwidth =</span> <span class="fl">0.5</span>,
+        <span class="dt">fill =</span> <span class="st">&quot;cornsilk&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span>
+<span class="st">    </span><span class="kw">stat_function</span>(<span class="dt">fun =</span> dnorm, <span class="dt">color =</span> <span class="st">&quot;maroon&quot;</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:histogram"></span>
+<img src="01-rmarkdown_files/figure-html/histogram-1.png" alt="Histogram with probability density function." width="672" />
+<p class="caption">
+Figure 2.1: Histogram with probability density function.
+</p>
+</div>
+<p>The analog with base graphics doesn’t work as well because it is two commands that don’t talk to each other.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># for base graphics we don&#39;t need data in data frames</span>
+x &lt;-<span class="st"> </span>mydata<span class="op">$</span>x
+<span class="kw">hist</span>(x, <span class="dt">probability =</span> <span class="ot">TRUE</span>)
+<span class="kw">curve</span>(<span class="kw">dnorm</span>(x), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="figure" style="text-align: center"><span id="fig:histogram-too"></span>
+<img src="01-rmarkdown_files/figure-html/histogram-too-1.png" alt="Histogram with probability density function (base graphics)." width="672" />
+<p class="caption">
+Figure 2.2: Histogram with probability density function (base graphics).
+</p>
+</div>
+</div>
+<div id="tables" class="section level3">
+<h3><span class="header-section-number">2.5.3</span> Tables</h3>
+<p>The no-snarf-and-barf rule means we have to use R to construct all our tables. To see how to do that, first we need a table.</p>
+<p>Make up some regression data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">n &lt;-<span class="st"> </span><span class="dv">50</span>
+x &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, n)
+a.true &lt;-<span class="st"> </span><span class="dv">3</span>
+b.true &lt;-<span class="st"> </span><span class="fl">1.5</span>
+y.true &lt;-<span class="st"> </span>a.true <span class="op">+</span><span class="st"> </span>b.true <span class="op">*</span><span class="st"> </span>x
+s.true &lt;-<span class="st"> </span><span class="fl">17.3</span>
+y &lt;-<span class="st"> </span>y.true <span class="op">+</span><span class="st"> </span>s.true <span class="op">*</span><span class="st"> </span><span class="kw">rnorm</span>(n)</code></pre></div>
+<p>And fit some models to it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">out1 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x)
+out2 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>))
+out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(x<span class="op">^</span><span class="dv">3</span>))
+<span class="kw">anova</span>(out1, out2, out3)</code></pre></div>
+<pre><code>## Analysis of Variance Table
+## 
+## Model 1: y ~ x
+## Model 2: y ~ x + I(x^2)
+## Model 3: y ~ x + I(x^2) + I(x^3)
+##   Res.Df   RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     48 13319                           
+## 2     47 12774  1    545.03 1.9780 0.1663
+## 3     46 12675  1     98.26 0.3566 0.5533</code></pre>
+<p>That is a table of sorts.</p>
+<p>In order to make that a table nicely formatted for the document we are making, first we have to figure out what the output of the R function <code>anova</code> is and capture it so we can use it.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">foo &lt;-<span class="st"> </span><span class="kw">anova</span>(out1, out2, out3)
+<span class="kw">class</span>(foo)</code></pre></div>
+<pre><code>## [1] &quot;anova&quot;      &quot;data.frame&quot;</code></pre>
+<p>It is a data frame, which is the easiest thing to turn into a table, and the simplest way to do that seems to be the <code>kable</code> option on our R chunk</p>
+<table>
+<caption><span id="tab:kable">Table 2.1: </span>ANOVA Table</caption>
+<thead>
+<tr class="header">
+<th align="right">Res.Df</th>
+<th align="right">RSS</th>
+<th align="right">Df</th>
+<th align="right">Sum of Sq</th>
+<th align="right">F</th>
+<th align="right">Pr(&gt;F)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">48</td>
+<td align="right">13318.6</td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="right">47</td>
+<td align="right">12773.5</td>
+<td align="right">1</td>
+<td align="right">545.03</td>
+<td align="right">1.978</td>
+<td align="right">0.166</td>
+</tr>
+<tr class="odd">
+<td align="right">46</td>
+<td align="right">12675.3</td>
+<td align="right">1</td>
+<td align="right">98.26</td>
+<td align="right">0.357</td>
+<td align="right">0.553</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="in-line-r" class="section level3">
+<h3><span class="header-section-number">2.5.4</span> In-Line R</h3>
+<p>You can also execute R not in a code chunk but just in-line in your writing. Here is an example of that. First let’s get some computation we want to quote.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(out3)</code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = y ~ x + I(x^2) + I(x^3))
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -37.442  -9.282  -1.069   9.400  43.135 
+## 
+## Coefficients:
+##               Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) -1.048e+01  1.014e+01  -1.034   0.3066  
+## x            3.318e+00  1.705e+00   1.946   0.0578 .
+## I(x^2)      -6.326e-02  7.727e-02  -0.819   0.4172  
+## I(x^3)       5.951e-04  9.966e-04   0.597   0.5533  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 16.6 on 46 degrees of freedom
+## Multiple R-squared:  0.6478, Adjusted R-squared:  0.6248 
+## F-statistic:  28.2 on 3 and 46 DF,  p-value: 1.685e-10</code></pre>
+<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(-0.0632617\)</span> and <span class="math inline">\(5.9510644\times 10^{-4}\)</span>. Magic!</p>
+<p>Note that these are coefficients for a regression on random data that is different every time the document is run (although wouldn’t be if we uncommented the <code>set.seed</code> command). By not using snarf-and-barf we always have the right numbers.</p>
+<p>Also note that R Markdown (in its wisdom or unwisdom) forces you to know a little bit of LaTeX. When the number needs “scientific notation” R Markdown emits LaTeX here so the number must be enclosed in dollar signs (the LaTeX math marker for in-line math). So if these weren’t enclosed in dollar signs nonsense would be printed. That coefficient of x<sup>3</sup> would come out 5.951064410^{-4} if the dollar signs were omitted.</p>
+</div>
+<div id="r-chunk-options" class="section level3">
+<h3><span class="header-section-number">2.5.5</span> R Chunk Options</h3>
+<p>We have already illustrated a few R chunk options.</p>
+<p>Another useful one is <code>echo = FALSE</code>. In this paragraph there is such a code chunk, but you don’t see it.</p>
+<p>That is, you don’t see it unless you look at the source.</p>
+<p>But we can use it in another code chunk.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hide</code></pre></div>
+<pre><code>## [1] 6.283185</code></pre>
+<p>Any knitr chunk option found at <a href="https://yihui.name/knitr/options/" class="uri">https://yihui.name/knitr/options/</a> can be use as an R Markdown chunk option (knitr underlies rmarkdown).</p>
+<p>Another useful option is <code>cache = TRUE</code>. That will be illustrated in the next chapter.</p>
 
+</div>
 </div>
 </div>
             </section>
@@ -300,6 +449,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

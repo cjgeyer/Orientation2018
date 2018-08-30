@@ -62,7 +62,6 @@ Attribution-ShareAlike 4.0 International License
 
  * The version of the `bookdown` package used to make this document is `r packageVersion("bookdown")`.
 
- * The version of the `knitr` package used to make this document is `r packageVersion("knitr")`.
  * The version of the `rmarkdown` package used to make this document is `r packageVersion("rmarkdown")`.
 
  * The version of the `knitr` package used to make this document is `r packageVersion("knitr")`.

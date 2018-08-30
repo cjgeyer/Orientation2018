@@ -118,7 +118,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="2.3" data-path="r-markdown.html"><a href="r-markdown.html#getting-started"><i class="fa fa-check"></i><b>2.3</b> Getting Started</a></li>
 <li class="chapter" data-level="2.4" data-path="r-markdown.html"><a href="r-markdown.html#syntax-not-involving-r"><i class="fa fa-check"></i><b>2.4</b> Syntax not Involving R</a></li>
-<li class="chapter" data-level="2.5" data-path="r-markdown.html"><a href="r-markdown.html#syntax-involving-r"><i class="fa fa-check"></i><b>2.5</b> Syntax Involving R</a></li>
+<li class="chapter" data-level="2.5" data-path="r-markdown.html"><a href="r-markdown.html#syntax-involving-r"><i class="fa fa-check"></i><b>2.5</b> Syntax Involving R</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="r-markdown.html"><a href="r-markdown.html#code-chunks"><i class="fa fa-check"></i><b>2.5.1</b> Code Chunks</a></li>
+<li class="chapter" data-level="2.5.2" data-path="r-markdown.html"><a href="r-markdown.html#plots"><i class="fa fa-check"></i><b>2.5.2</b> Plots</a></li>
+<li class="chapter" data-level="2.5.3" data-path="r-markdown.html"><a href="r-markdown.html#tables"><i class="fa fa-check"></i><b>2.5.3</b> Tables</a></li>
+<li class="chapter" data-level="2.5.4" data-path="r-markdown.html"><a href="r-markdown.html#in-line-r"><i class="fa fa-check"></i><b>2.5.4</b> In-Line R</a></li>
+<li class="chapter" data-level="2.5.5" data-path="r-markdown.html"><a href="r-markdown.html#r-chunk-options"><i class="fa fa-check"></i><b>2.5.5</b> R Chunk Options</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="3" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html"><i class="fa fa-check"></i><b>3</b> Parallel Computing in R</a></li>
 <li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a></li>
@@ -155,7 +161,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li><p>The version of R used to make this document is 3.5.1.</p></li>
 <li><p>The version of the <code>bookdown</code> package used to make this document is 0.7.</p></li>
-<li>The version of the <code>knitr</code> package used to make this document is 1.20.</li>
 <li><p>The version of the <code>rmarkdown</code> package used to make this document is 1.10.</p></li>
 <li><p>The version of the <code>knitr</code> package used to make this document is 1.20.</p></li>
 <li><p>The version of the <code>ggplot2</code> package used to make this document is 3.0.0.</p></li>
@@ -243,6 +248,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>
