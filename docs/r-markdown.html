@@ -153,8 +153,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.7.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#the-example-on-a-cluster"><i class="fa fa-check"></i><b>3.7.4</b> The Example on a Cluster</a></li>
 <li class="chapter" data-level="3.7.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#tear-down"><i class="fa fa-check"></i><b>3.7.5</b> Tear Down</a></li>
 </ul></li>
+<li class="chapter" data-level="3.8" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis-and-fork-exec"><i class="fa fa-check"></i><b>3.8</b> LATIS and Fork-Exec</a></li>
+<li class="chapter" data-level="3.9" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis-and-clusters"><i class="fa fa-check"></i><b>3.9</b> LATIS and Clusters</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a></li>
+<li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a><ul>
+<li class="chapter" data-level="4.1" data-path="version-control-with-git.html"><a href="version-control-with-git.html#reading"><i class="fa fa-check"></i><b>4.1</b> Reading</a></li>
+<li class="chapter" data-level="4.2" data-path="version-control-with-git.html"><a href="version-control-with-git.html#git-command-line"><i class="fa fa-check"></i><b>4.2</b> Git Command Line</a></li>
+<li class="chapter" data-level="4.3" data-path="version-control-with-git.html"><a href="version-control-with-git.html#git-from-rstudio"><i class="fa fa-check"></i><b>4.3</b> Git from RStudio</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -334,12 +340,10 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 ## Model 1: y ~ x
 ## Model 2: y ~ x + I(x^2)
 ## Model 3: y ~ x + I(x^2) + I(x^3)
-##   Res.Df   RSS Df Sum of Sq      F  Pr(&gt;F)  
-## 1     48 15162                              
-## 2     47 13362  1   1799.99 6.3220 0.01549 *
-## 3     46 13097  1    264.72 0.9298 0.33997  
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+##   Res.Df   RSS Df Sum of Sq      F Pr(&gt;F)
+## 1     48 13340                           
+## 2     47 13333  1    7.1625 0.0247 0.8758
+## 3     46 13332  1    0.5834 0.0020 0.9644</code></pre>
 <p>That is a table of sorts.</p>
 <p>In order to make that a table nicely formatted for the document we are making, first we have to figure out what the output of the R function <code>anova</code> is and capture it so we can use it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">foo &lt;-<span class="st"> </span><span class="kw">anova</span>(out1, out2, out3)
@@ -361,7 +365,7 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 <tbody>
 <tr class="odd">
 <td align="right">48</td>
-<td align="right">15161.7</td>
+<td align="right">13339.9</td>
 <td align="right"></td>
 <td align="right"></td>
 <td align="right"></td>
@@ -369,19 +373,19 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 </tr>
 <tr class="even">
 <td align="right">47</td>
-<td align="right">13361.7</td>
+<td align="right">13332.7</td>
 <td align="right">1</td>
-<td align="right">1799.99</td>
-<td align="right">6.322</td>
-<td align="right">0.015</td>
+<td align="right">7.16</td>
+<td align="right">0.025</td>
+<td align="right">0.876</td>
 </tr>
 <tr class="odd">
 <td align="right">46</td>
-<td align="right">13097.0</td>
+<td align="right">13332.2</td>
 <td align="right">1</td>
-<td align="right">264.72</td>
-<td align="right">0.930</td>
-<td align="right">0.340</td>
+<td align="right">0.58</td>
+<td align="right">0.002</td>
+<td align="right">0.964</td>
 </tr>
 </tbody>
 </table>
@@ -396,21 +400,21 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -47.324 -10.144   1.109  11.592  37.180 
+## -39.317 -10.790  -1.542  12.260  40.168 
 ## 
 ## Coefficients:
 ##               Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)  7.8079911 10.3082637   0.757    0.453
-## x            1.4914816  1.7331602   0.861    0.394
-## I(x^2)      -0.0424920  0.0785475  -0.541    0.591
-## I(x^3)       0.0009768  0.0010130   0.964    0.340
+## (Intercept) -1.056e+01  1.040e+01  -1.015    0.315
+## x            1.974e+00  1.749e+00   1.129    0.265
+## I(x^2)       1.475e-03  7.925e-02   0.019    0.985
+## I(x^3)      -4.585e-05  1.022e-03  -0.045    0.964
 ## 
-## Residual standard error: 16.87 on 46 degrees of freedom
-## Multiple R-squared:  0.6858, Adjusted R-squared:  0.6653 
-## F-statistic: 33.46 on 3 and 46 DF,  p-value: 1.258e-11</code></pre>
-<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(-0.042492\)</span> and <span class="math inline">\(9.7677845\times 10^{-4}\)</span>. Magic!</p>
+## Residual standard error: 17.02 on 46 degrees of freedom
+## Multiple R-squared:  0.7467, Adjusted R-squared:  0.7302 
+## F-statistic:  45.2 on 3 and 46 DF,  p-value: 9.182e-14</code></pre>
+<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(0.0014746\)</span> and <span class="math inline">\(-4.5853231\times 10^{-5}\)</span>. Magic!</p>
 <p>Note that these are coefficients for a regression on random data that is different every time the document is run (although wouldn’t be if we uncommented the <code>set.seed</code> command). By not using snarf-and-barf we always have the right numbers.</p>
-<p>Also note that R Markdown (in its wisdom or unwisdom) forces you to know a little bit of LaTeX. When the number needs “scientific notation” R Markdown emits LaTeX here so the number must be enclosed in dollar signs (the LaTeX math marker for in-line math). So if these weren’t enclosed in dollar signs nonsense would be printed. That coefficient of x<sup>3</sup> would come out 9.767784510^{-4} if the dollar signs were omitted.</p>
+<p>Also note that R Markdown (in its wisdom or unwisdom) forces you to know a little bit of LaTeX. When the number needs “scientific notation” R Markdown emits LaTeX here so the number must be enclosed in dollar signs (the LaTeX math marker for in-line math). So if these weren’t enclosed in dollar signs nonsense would be printed.</p>
 </div>
 <div id="r-chunk-options" class="section level3">
 <h3><span class="header-section-number">2.5.5</span> R Chunk Options</h3>

@@ -153,8 +153,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.7.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#the-example-on-a-cluster"><i class="fa fa-check"></i><b>3.7.4</b> The Example on a Cluster</a></li>
 <li class="chapter" data-level="3.7.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#tear-down"><i class="fa fa-check"></i><b>3.7.5</b> Tear Down</a></li>
 </ul></li>
+<li class="chapter" data-level="3.8" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis-and-fork-exec"><i class="fa fa-check"></i><b>3.8</b> LATIS and Fork-Exec</a></li>
+<li class="chapter" data-level="3.9" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis-and-clusters"><i class="fa fa-check"></i><b>3.9</b> LATIS and Clusters</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a></li>
+<li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a><ul>
+<li class="chapter" data-level="4.1" data-path="version-control-with-git.html"><a href="version-control-with-git.html#reading"><i class="fa fa-check"></i><b>4.1</b> Reading</a></li>
+<li class="chapter" data-level="4.2" data-path="version-control-with-git.html"><a href="version-control-with-git.html#git-command-line"><i class="fa fa-check"></i><b>4.2</b> Git Command Line</a></li>
+<li class="chapter" data-level="4.3" data-path="version-control-with-git.html"><a href="version-control-with-git.html#git-from-rstudio"><i class="fa fa-check"></i><b>4.3</b> Git from RStudio</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -182,117 +188,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">3.2</span> Just the R from the R Markdown Source</h2>
 <p>To get just the R chunks from R Markdown do (in R)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">knitr<span class="op">::</span><span class="kw">purl</span>(<span class="st">&quot;02-parallel.Rmd&quot;</span>)</code></pre></div>
-<pre><code>## 
-## 
-## processing file: 02-parallel.Rmd</code></pre>
-<pre><code>## 
-  |                                                                       
-  |                                                                 |   0%
-  |                                                                       
-  |.                                                                |   2%
-  |                                                                       
-  |..                                                               |   4%
-  |                                                                       
-  |....                                                             |   6%
-  |                                                                       
-  |.....                                                            |   8%
-  |                                                                       
-  |......                                                           |  10%
-  |                                                                       
-  |........                                                         |  12%
-  |                                                                       
-  |.........                                                        |  13%
-  |                                                                       
-  |..........                                                       |  15%
-  |                                                                       
-  |...........                                                      |  17%
-  |                                                                       
-  |............                                                     |  19%
-  |                                                                       
-  |..............                                                   |  21%
-  |                                                                       
-  |...............                                                  |  23%
-  |                                                                       
-  |................                                                 |  25%
-  |                                                                       
-  |..................                                               |  27%
-  |                                                                       
-  |...................                                              |  29%
-  |                                                                       
-  |....................                                             |  31%
-  |                                                                       
-  |.....................                                            |  33%
-  |                                                                       
-  |......................                                           |  35%
-  |                                                                       
-  |........................                                         |  37%
-  |                                                                       
-  |.........................                                        |  38%
-  |                                                                       
-  |..........................                                       |  40%
-  |                                                                       
-  |............................                                     |  42%
-  |                                                                       
-  |.............................                                    |  44%
-  |                                                                       
-  |..............................                                   |  46%
-  |                                                                       
-  |...............................                                  |  48%
-  |                                                                       
-  |................................                                 |  50%
-  |                                                                       
-  |..................................                               |  52%
-  |                                                                       
-  |...................................                              |  54%
-  |                                                                       
-  |....................................                             |  56%
-  |                                                                       
-  |......................................                           |  58%
-  |                                                                       
-  |.......................................                          |  60%
-  |                                                                       
-  |........................................                         |  62%
-  |                                                                       
-  |.........................................                        |  63%
-  |                                                                       
-  |..........................................                       |  65%
-  |                                                                       
-  |............................................                     |  67%
-  |                                                                       
-  |.............................................                    |  69%
-  |                                                                       
-  |..............................................                   |  71%
-  |                                                                       
-  |................................................                 |  73%
-  |                                                                       
-  |.................................................                |  75%
-  |                                                                       
-  |..................................................               |  77%
-  |                                                                       
-  |...................................................              |  79%
-  |                                                                       
-  |....................................................             |  81%
-  |                                                                       
-  |......................................................           |  83%
-  |                                                                       
-  |.......................................................          |  85%
-  |                                                                       
-  |........................................................         |  87%
-  |                                                                       
-  |..........................................................       |  88%
-  |                                                                       
-  |...........................................................      |  90%
-  |                                                                       
-  |............................................................     |  92%
-  |                                                                       
-  |.............................................................    |  94%
-  |                                                                       
-  |..............................................................   |  96%
-  |                                                                       
-  |................................................................ |  98%
-  |                                                                       
-  |.................................................................| 100%</code></pre>
-<pre><code>## output file: 02-parallel.R</code></pre>
 <pre><code>## [1] &quot;02-parallel.R&quot;</code></pre>
 <p><a href="https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-parallel.R" class="uri">https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-parallel.R</a></p>
 </div>
@@ -404,28 +299,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 10582
+## [1] 15870
 ## 
 ## [[2]]
-## [1] 10583
+## [1] 15871
 ## 
 ## [[3]]
-## [1] 10584
+## [1] 15872
 ## 
 ## [[4]]
-## [1] 10585
+## [1] 15873
 ## 
 ## [[5]]
-## [1] 10586
+## [1] 15874
 ## 
 ## [[6]]
-## [1] 10587
+## [1] 15875
 ## 
 ## [[7]]
-## [1] 10588
+## [1] 15876
 ## 
 ## [[8]]
-## [1] 10589</code></pre>
+## [1] 15877</code></pre>
 </div>
 <div id="parallel-streams-of-random-numbers" class="section level3">
 <h3><span class="header-section-number">3.6.3</span> Parallel Streams of Random Numbers</h3>
@@ -644,28 +539,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 10610
+## [1] 15898
 ## 
 ## [[2]]
-## [1] 10619
+## [1] 15907
 ## 
 ## [[3]]
-## [1] 10628
+## [1] 15916
 ## 
 ## [[4]]
-## [1] 10637
+## [1] 15925
 ## 
 ## [[5]]
-## [1] 10646
+## [1] 15934
 ## 
 ## [[6]]
-## [1] 10655
+## [1] 15943
 ## 
 ## [[7]]
-## [1] 10664
+## [1] 15952
 ## 
 ## [[8]]
-## [1] 10673</code></pre>
+## [1] 15961</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -841,14 +736,47 @@ time5</code></pre></div>
 <pre><code>##  elapsed 
 ## 9.700857</code></pre>
 <p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 3.1-fold speedup. If we had more cores, we could do even better.</p>
+<p>We also that this method isn’t as good as the other method. So why do we want it (other than that the other doesn’t work on Windows)? Because it scales. You can get clusters with thousands of cores, but you can’t get thousands of cores in one computer.</p>
 </div>
 </div>
 <div id="tear-down" class="section level3">
 <h3><span class="header-section-number">3.7.5</span> Tear Down</h3>
 <p>Don’t forget to tear down the cluster when you are done.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
-
 </div>
+</div>
+<div id="latis-and-fork-exec" class="section level2">
+<h2><span class="header-section-number">3.8</span> LATIS and Fork-Exec</h2>
+<p>We are going to just show how to do this in an interactive session.</p>
+<p>which is just like the fork-exec part of this document except for a few minor changes for running on LATIS.</p>
+<p>SSH into <code>compute.cla.umn.edu</code></p>
+<p>Then</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
+<span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
+<span class="fu">wget</span> --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
+<span class="ex">module</span> load R/3.4.1
+<span class="co"># we are assured that a more recent version of R will be available soon</span>
+<span class="ex">R</span> CMD BATCH --vanilla 02-fork-exec.R
+<span class="fu">cat</span> 02-fork-exec.Rout
+<span class="bu">exit</span>
+<span class="bu">exit</span></code></pre></div>
+<p>Shows that this works.</p>
+<p>We are not going to try to explain today how to do this as a batch job.</p>
+</div>
+<div id="latis-and-clusters" class="section level2">
+<h2><span class="header-section-number">3.9</span> LATIS and Clusters</h2>
+<p>Almost the same thing again</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
+<span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
+<span class="fu">wget</span> --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
+<span class="ex">module</span> load R/3.4.1
+<span class="co"># we are assured that a more recent version of R will be available soon</span>
+<span class="ex">R</span> CMD BATCH --vanilla 02-cluster.R
+<span class="fu">cat</span> 02-cluster.Rout
+<span class="bu">exit</span>
+<span class="bu">exit</span></code></pre></div>
+<p>except this doesn’t seem to work right now. LATIS seems to have to do some more work on MPI clusters and R.</p>
+
 </div>
 </div>
             </section>

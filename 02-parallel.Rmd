@@ -426,4 +426,28 @@ wget --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/mast
 module load R/3.4.1
 # we are assured that a more recent version of R will be available soon
 R CMD BATCH --vanilla 02-fork-exec.R
+cat 02-fork-exec.Rout
+exit
+exit
 ```
+Shows that this works.
+
+We are not going to try to explain today how to do this as a batch job.
+
+## LATIS and Clusters
+
+Almost the same thing again
+```{r engine='bash', eval=FALSE}
+qsub -I -l nodes=1:ppn=8
+cd tmp/Orientation2018 # or wherever
+wget --no-clobber https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
+module load R/3.4.1
+# we are assured that a more recent version of R will be available soon
+R CMD BATCH --vanilla 02-cluster.R
+cat 02-cluster.Rout
+exit
+exit
+```
+except this doesn't seem to work right now.  LATIS seems to have to
+do some more work on MPI clusters and R.
+

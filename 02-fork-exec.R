@@ -40,6 +40,7 @@ library(parallel)
 # that gives the number of physical cores, not how many you are allowed
 # instead use
 ncores <- as.numeric(Sys.getenv("PBS_NP"))
+ncores
 mclapply(1:ncores, function(x) Sys.getpid(), mc.cores = ncores)
 
 ## ------------------------------------------------------------------------
@@ -85,7 +86,4 @@ for (irep in 1:nrep)
 time4
 apply(time4, 2, mean)
 apply(time4, 2, sd) / sqrt(nrep)
-
-## ------------------------------------------------------------------------
-apply(time4, 2, mean)["elapsed"]
 

@@ -162,3 +162,7 @@ rats <- apply(time1, 2, mean)["elapsed"] / apply(time5, 2, mean)["elapsed"]
 ## ------------------------------------------------------------------------
 stopCluster(cl)
 
+## qsub -I -l nodes=1:ppn=8
+
+## qsub -I -l nodes=1:ppn=8
+

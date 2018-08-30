@@ -280,10 +280,6 @@ a little bit of LaTeX.  When the number needs "scientific notation" R
 Markdown emits LaTeX here so the number must be enclosed in dollar signs
 (the LaTeX math marker for in-line math).  So if these weren't enclosed
 in dollar signs nonsense would be printed.
-That coefficient of x^3^ would come out
-`r out3$coef[4]`
-if the dollar signs were omitted.
-
 
 ### R Chunk Options
 

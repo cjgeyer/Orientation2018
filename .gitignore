@@ -2,3 +2,6 @@ doit.Rout
 *.rds
 *.md
 *.bak
+_bookdown_files
+docs/02-parallel_files
+

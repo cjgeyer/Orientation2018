@@ -153,8 +153,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.7.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#the-example-on-a-cluster"><i class="fa fa-check"></i><b>3.7.4</b> The Example on a Cluster</a></li>
 <li class="chapter" data-level="3.7.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#tear-down"><i class="fa fa-check"></i><b>3.7.5</b> Tear Down</a></li>
 </ul></li>
+<li class="chapter" data-level="3.8" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis-and-fork-exec"><i class="fa fa-check"></i><b>3.8</b> LATIS and Fork-Exec</a></li>
+<li class="chapter" data-level="3.9" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis-and-clusters"><i class="fa fa-check"></i><b>3.9</b> LATIS and Clusters</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a></li>
+<li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a><ul>
+<li class="chapter" data-level="4.1" data-path="version-control-with-git.html"><a href="version-control-with-git.html#reading"><i class="fa fa-check"></i><b>4.1</b> Reading</a></li>
+<li class="chapter" data-level="4.2" data-path="version-control-with-git.html"><a href="version-control-with-git.html#git-command-line"><i class="fa fa-check"></i><b>4.2</b> Git Command Line</a></li>
+<li class="chapter" data-level="4.3" data-path="version-control-with-git.html"><a href="version-control-with-git.html#git-from-rstudio"><i class="fa fa-check"></i><b>4.3</b> Git from RStudio</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -174,7 +180,88 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="version-control-with-git" class="section level1">
 <h1><span class="header-section-number"> 4</span> Version Control with Git</h1>
+<div id="reading" class="section level2">
+<h2><span class="header-section-number">4.1</span> Reading</h2>
+<p>The best book on Git that I know of is <em>Pro Git</em>, which can be bought but is also available for free on the web at <a href="https://git-scm.com/book/en/v2" class="uri">https://git-scm.com/book/en/v2</a>.</p>
+</div>
+<div id="git-command-line" class="section level2">
+<h2><span class="header-section-number">4.2</span> Git Command Line</h2>
+<p>There should be instruction on using Git from ythe command line, but there’s no time. The <em>Pro Git</em> book, or my notes for the IRSA short course at <a href="https://irsaatumn.github.io/RWorkshop18/git-version-control.html" class="uri">https://irsaatumn.github.io/RWorkshop18/git-version-control.html</a> will have to do.</p>
+</div>
+<div id="git-from-rstudio" class="section level2">
+<h2><span class="header-section-number">4.3</span> Git from RStudio</h2>
+<p>These are notes on how to use Git the dumb way using RStudio and GitHub.</p>
+<p>In your GitHub account on <code>github.umn.edu</code></p>
+<ul>
+<li><p>Make a new repo that we can trash later (just for messing around).</p>
+<ul>
+<li><p>Log in to GitHub</p></li>
+<li><p>Click on the green button that says “New repository”</p></li>
+<li><p>Give it a name (of course) and maybe a description.</p></li>
+<li><p>Do not add <code>.gitignore</code> file or a README file or a license (maybe do that later)</p></li>
+<li><p>Ignore all the helpful advice on the next page (none of it is for RStudio)</p></li>
+</ul></li>
+</ul>
+<p>In RStudio</p>
+<ul>
+<li><p>On the File menu</p>
+<ul>
+<li><p>select “New project…”</p></li>
+<li><p>then select “Version Control”</p></li>
+<li><p>then select “Git”</p>
+<ul>
+<li><p>the “Repository URL” is something like <a href="https://github.umn.edu/geyer/junk" class="uri">https://github.umn.edu/geyer/junk</a></p></li>
+<li><p>the “Project directory name” is something like <code>junk</code></p></li>
+<li><p>the “Create project as subdirectory of” is done with file browser</p></li>
+<li><p>I also did “Open in new session”</p></li>
+</ul></li>
+<li><p>then punch “Create Project”</p></li>
+</ul></li>
+<li><p>We’re in business !!!!!</p></li>
+<li><p>Note that RStudio creates 2 files automagically (<code>.gitignore</code> and <code>*.Rproj</code>) we may have to edit the former to do what we want.</p></li>
+<li><p>Before we do any commits we have to tell Git who you are (unless you have used Git previously and have already done this)</p>
+<ul>
+<li><p>On the Tools menu</p>
+<ul>
+<li><p>select “Terminal”</p></li>
+<li><p>then select “New Terminal”</p></li>
+<li><p>then you can do</p>
+<pre><code> git config --global user.name &quot;Your Name&quot;
 
+ git config --global user.email &quot;your@email.com&quot;</code></pre>
+<p>(I don’t have to do this because I did it long ago) where “Your Name” and “<a href="mailto:your@email.com">your@email.com</a>” are replaced by your actual name and e-mail address.</p></li>
+<li><p>Then click on the “Console” button to get back to the R console</p></li>
+</ul></li>
+</ul></li>
+<li><p>Open a new R markdown file</p>
+<ul>
+<li><p>On the File menu</p>
+<ul>
+<li><p>select “New File”</p></li>
+<li><p>then select “R Markdown”</p>
+<ul>
+<li><p>and in the window that comes up fill in a title and author</p></li>
+<li><p>and click the “OK” button</p></li>
+</ul></li>
+</ul></li>
+</ul></li>
+<li><p>RStudio then gives you a simple example R Markdown file</p></li>
+<li><p>click the “Knit” button (in the upper left pane) and it first asks you to save the file (by default in the directory for our project). Do that: give it a name ending in .Rmd, for example, <code>mess.Rmd</code></p></li>
+<li><p>Now we are really in business !!!!!</p></li>
+<li><p>Now do a <code>git commit</code> (either using the command line) or using the “Git” button in the upper right pane in RStudio</p></li>
+<li><p>in the window that comes up click to stage at least the <em>.Rproj </em>.Rmd and .gitignore files</p></li>
+<li><p>and type in a commit message</p></li>
+<li><p>and click the “commit” button</p></li>
+<li><p>If we go to the command line and do “git status” or “git log” we see that we have indeed done a commit.</p></li>
+<li><p>Now we do a push using the “Push” button in the upper right panel (oh garbage! We have to type user name and password every time we do anything! This sucks! RStudio is infinitely inferior to the command line in this respect. See the chapter. Actually, that was unfair. RStudio can help you use SSH keys. On the “Tools” menu, choose “Global Options” and then “Git/SVN”)</p></li>
+</ul>
+<p>Nevertheless, we have done a commit and push. As can be seen by looking on the repo on GitHub.</p>
+<ul>
+<li>Now we can make all the changes we want to the “project” and commit and push whenever we want and if we had collaborators we could also pull from them (I assume). We definitely could if we were using the command line.</li>
+</ul>
+<p>More reading. More stuff about using RStudio with Git and GitHub can be found at Hadley Wickham’s web site <a href="http://r-pkgs.had.co.nz/git.html" class="uri">http://r-pkgs.had.co.nz/git.html</a>.</p>
+
+</div>
 </div>
             </section>
 
