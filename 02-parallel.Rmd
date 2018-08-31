@@ -166,8 +166,6 @@ random number generator (RNG) designed for parallelization.
 RNGkind("L'Ecuyer-CMRG")
 set.seed(42)
 mclapply(1:ncores, function(x) rnorm(5), mc.cores = ncores)
-set.seed(42)
-mclapply(1:ncores, function(x) rnorm(5), mc.cores = ncores)
 ```
 Just right!
 We have different random numbers in all our jobs.
@@ -175,6 +173,9 @@ And it is reproducible.
  
 But this may not work like you may think it does.
 If we do it again we get exactly the same results.
+```{r}
+mclapply(1:ncores, function(x) rnorm(5), mc.cores = ncores)
+```
 Running `mclapply` does not change `.Random.seed` in the parent process
 (the R process you are typing into).  It only changes it in the child
 processes (that do the work).  But there is no communication from child

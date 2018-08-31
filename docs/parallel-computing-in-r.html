@@ -305,28 +305,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 19037
+## [1] 19931
 ## 
 ## [[2]]
-## [1] 19038
+## [1] 19932
 ## 
 ## [[3]]
-## [1] 19039
+## [1] 19933
 ## 
 ## [[4]]
-## [1] 19040
+## [1] 19934
 ## 
 ## [[5]]
-## [1] 19041
+## [1] 19935
 ## 
 ## [[6]]
-## [1] 19042
+## [1] 19936
 ## 
 ## [[7]]
-## [1] 19043
+## [1] 19937
 ## 
 ## [[8]]
-## [1] 19044</code></pre>
+## [1] 19938</code></pre>
 </div>
 <div id="warning" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Warning</h3>
@@ -365,8 +365,9 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 ## 
 ## [[8]]
 ## [1]  1.3502819 -1.0055894 -0.4591798 -0.0628527 -0.2706805</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">42</span>)
-<span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">rnorm</span>(<span class="dv">5</span>), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
+<p>Just right! We have different random numbers in all our jobs. And it is reproducible.</p>
+<p>But this may not work like you may think it does. If we do it again we get exactly the same results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">rnorm</span>(<span class="dv">5</span>), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
 ## [1]  1.11932846 -0.07617141 -0.35021912 -0.33491161 -1.73311280
 ## 
@@ -390,8 +391,7 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 ## 
 ## [[8]]
 ## [1]  1.3502819 -1.0055894 -0.4591798 -0.0628527 -0.2706805</code></pre>
-<p>Just right! We have different random numbers in all our jobs. And it is reproducible.</p>
-<p>But this may not work like you may think it does. If we do it again we get exactly the same results. Running <code>mclapply</code> does not change <code>.Random.seed</code> in the parent process (the R process you are typing into). It only changes it in the child processes (that do the work). But there is no communication from child to parent <em>except</em> the list of results returned by <code>mclapply</code>.</p>
+<p>Running <code>mclapply</code> does not change <code>.Random.seed</code> in the parent process (the R process you are typing into). It only changes it in the child processes (that do the work). But there is no communication from child to parent <em>except</em> the list of results returned by <code>mclapply</code>.</p>
 <p>This is a fundamental problem with <code>mclapply</code> and the fork-exec method of parallelization. And it has no real solution. You just have to be aware of it.</p>
 <p>If you want to do exactly the same random thing with <code>mclapply</code> and get different random results, then you must change <code>.Random.seed</code> in the parent process, either with <code>set.seed</code> or by otherwise using random numbers <em>in the parent process</em>.</p>
 </div>
@@ -529,28 +529,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 19065
+## [1] 19959
 ## 
 ## [[2]]
-## [1] 19074
+## [1] 19968
 ## 
 ## [[3]]
-## [1] 19083
+## [1] 19977
 ## 
 ## [[4]]
-## [1] 19092
+## [1] 19986
 ## 
 ## [[5]]
-## [1] 19101
+## [1] 19995
 ## 
 ## [[6]]
-## [1] 19110
+## [1] 20004
 ## 
 ## [[7]]
-## [1] 19119
+## [1] 20013
 ## 
 ## [[8]]
-## [1] 19128</code></pre>
+## [1] 20022</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
