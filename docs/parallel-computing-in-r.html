@@ -139,11 +139,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#parallel-computing-with-unix-fork-and-exec"><i class="fa fa-check"></i><b>3.5</b> Parallel Computing With Unix Fork and Exec</a><ul>
 <li class="chapter" data-level="3.5.1" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#introduction-2"><i class="fa fa-check"></i><b>3.5.1</b> Introduction</a></li>
 <li class="chapter" data-level="3.5.2" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#toy-problem"><i class="fa fa-check"></i><b>3.5.2</b> Toy Problem</a></li>
-<li class="chapter" data-level="3.5.3" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#parallel-streams-of-random-numbers"><i class="fa fa-check"></i><b>3.5.3</b> Parallel Streams of Random Numbers</a></li>
-<li class="chapter" data-level="3.5.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-example"><i class="fa fa-check"></i><b>3.5.4</b> The Example</a></li>
-<li class="chapter" data-level="3.5.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-try"><i class="fa fa-check"></i><b>3.5.5</b> Try It</a></li>
-<li class="chapter" data-level="3.5.6" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-check"><i class="fa fa-check"></i><b>3.5.6</b> Check It</a></li>
-<li class="chapter" data-level="3.5.7" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-time"><i class="fa fa-check"></i><b>3.5.7</b> Time It</a></li>
+<li class="chapter" data-level="3.5.3" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#warning"><i class="fa fa-check"></i><b>3.5.3</b> Warning</a></li>
+<li class="chapter" data-level="3.5.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#parallel-streams-of-random-numbers"><i class="fa fa-check"></i><b>3.5.4</b> Parallel Streams of Random Numbers</a></li>
+<li class="chapter" data-level="3.5.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-example"><i class="fa fa-check"></i><b>3.5.5</b> The Example</a></li>
+<li class="chapter" data-level="3.5.6" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-try"><i class="fa fa-check"></i><b>3.5.6</b> Try It</a></li>
+<li class="chapter" data-level="3.5.7" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-check"><i class="fa fa-check"></i><b>3.5.7</b> Check It</a></li>
+<li class="chapter" data-level="3.5.8" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-time"><i class="fa fa-check"></i><b>3.5.8</b> Time It</a></li>
 </ul></li>
 <li class="chapter" data-level="3.6" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#the-example-with-a-cluster"><i class="fa fa-check"></i><b>3.6</b> The Example With a Cluster</a><ul>
 <li class="chapter" data-level="3.6.1" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#introduction-3"><i class="fa fa-check"></i><b>3.6.1</b> Introduction</a></li>
@@ -304,31 +305,39 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 17210
+## [1] 19037
 ## 
 ## [[2]]
-## [1] 17211
+## [1] 19038
 ## 
 ## [[3]]
-## [1] 17212
+## [1] 19039
 ## 
 ## [[4]]
-## [1] 17213
+## [1] 19040
 ## 
 ## [[5]]
-## [1] 17214
+## [1] 19041
 ## 
 ## [[6]]
-## [1] 17215
+## [1] 19042
 ## 
 ## [[7]]
-## [1] 17216
+## [1] 19043
 ## 
 ## [[8]]
-## [1] 17217</code></pre>
+## [1] 19044</code></pre>
+</div>
+<div id="warning" class="section level3">
+<h3><span class="header-section-number">3.5.3</span> Warning</h3>
+<p>Quoted from the help page for R function <code>mclapply</code></p>
+<blockquote>
+<p>It is <em>strongly discouraged</em> to use these functions in GUI or embedded environments, because it leads to several processes sharing the same GUI which will likely cause chaos (and possibly crashes). Child processes should never use on-screen graphics devices.</p>
+</blockquote>
+<p>GUI includes RStudio. If you want speed, then you will have to learn how to use plain old R. The examples in the <a href="parallel-computing-in-r.html#latis">section on using clusters</a> show that. Of course, this whole document shows that too.</p>
 </div>
 <div id="parallel-streams-of-random-numbers" class="section level3">
-<h3><span class="header-section-number">3.5.3</span> Parallel Streams of Random Numbers</h3>
+<h3><span class="header-section-number">3.5.4</span> Parallel Streams of Random Numbers</h3>
 <p>To get random numbers in parallel, we need to use a special random number generator (RNG) designed for parallelization.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">RNGkind</span>(<span class="st">&quot;L&#39;Ecuyer-CMRG&quot;</span>)
 <span class="kw">set.seed</span>(<span class="dv">42</span>)
@@ -387,7 +396,7 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <p>If you want to do exactly the same random thing with <code>mclapply</code> and get different random results, then you must change <code>.Random.seed</code> in the parent process, either with <code>set.seed</code> or by otherwise using random numbers <em>in the parent process</em>.</p>
 </div>
 <div id="fork-example" class="section level3">
-<h3><span class="header-section-number">3.5.4</span> The Example</h3>
+<h3><span class="header-section-number">3.5.5</span> The Example</h3>
 <p>We need to rewrite our <code>doit</code> function</p>
 <ul>
 <li><p>to only do <code>1 / ncores</code> of the work in each child process,</p></li>
@@ -404,7 +413,7 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 }</code></pre></div>
 </div>
 <div id="fork-try" class="section level3">
-<h3><span class="header-section-number">3.5.5</span> Try It</h3>
+<h3><span class="header-section-number">3.5.6</span> Try It</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mout &lt;-<span class="st"> </span><span class="kw">mclapply</span>(<span class="kw">rep</span>(nsim <span class="op">/</span><span class="st"> </span>ncores, ncores), doit,
     <span class="dt">estimator =</span> mle, <span class="dt">mc.cores =</span> ncores)
 <span class="kw">lapply</span>(mout, head)</code></pre></div>
@@ -433,7 +442,7 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 ## [1] 0.7768910 1.0376265 0.8830854 0.8911714 1.0288567 1.1609360</code></pre>
 </div>
 <div id="fork-check" class="section level3">
-<h3><span class="header-section-number">3.5.6</span> Check It</h3>
+<h3><span class="header-section-number">3.5.7</span> Check It</h3>
 <p>Seems to have worked.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(mout)</code></pre></div>
 <pre><code>## [1] 8</code></pre>
@@ -470,7 +479,7 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <p><img src="02-parallel_files/figure-html/hist-fork-exec-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="fork-time" class="section level3">
-<h3><span class="header-section-number">3.5.7</span> Time It</h3>
+<h3><span class="header-section-number">3.5.8</span> Time It</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">time4 &lt;-<span class="st"> </span><span class="ot">NULL</span>
 <span class="cf">for</span> (irep <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span>nrep)
     time4 &lt;-<span class="st"> </span><span class="kw">rbind</span>(time4, <span class="kw">system.time</span>(theta.hat.mle &lt;-
@@ -520,28 +529,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 17238
+## [1] 19065
 ## 
 ## [[2]]
-## [1] 17247
+## [1] 19074
 ## 
 ## [[3]]
-## [1] 17256
+## [1] 19083
 ## 
 ## [[4]]
-## [1] 17265
+## [1] 19092
 ## 
 ## [[5]]
-## [1] 17274
+## [1] 19101
 ## 
 ## [[6]]
-## [1] 17283
+## [1] 19110
 ## 
 ## [[7]]
-## [1] 17292
+## [1] 19119
 ## 
 ## [[8]]
-## [1] 17301</code></pre>
+## [1] 19128</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -720,7 +729,7 @@ time5</code></pre></div>
 <div id="cluster-in-interactive-session" class="section level3">
 <h3><span class="header-section-number">3.7.2</span> Cluster in Interactive Session</h3>
 <p>Almost the same thing again</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -q multinode -l nodes=3:ppn=4
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
 <span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
 <span class="ex">module</span> load R/3.4.1
@@ -728,6 +737,7 @@ time5</code></pre></div>
 <span class="fu">cat</span> 02-cluster.Rout
 <span class="bu">exit</span>
 <span class="bu">exit</span></code></pre></div>
+<p>The <code>qsub</code> command says we want to use 4 cores on each of 3 nodes (computers) for 12 cores total.</p>
 </div>
 <div id="fork-exec-as-batch-job" class="section level3">
 <h3><span class="header-section-number">3.7.3</span> Fork-Exec as Batch Job</h3>

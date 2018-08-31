@@ -139,11 +139,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#parallel-computing-with-unix-fork-and-exec"><i class="fa fa-check"></i><b>3.5</b> Parallel Computing With Unix Fork and Exec</a><ul>
 <li class="chapter" data-level="3.5.1" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#introduction-2"><i class="fa fa-check"></i><b>3.5.1</b> Introduction</a></li>
 <li class="chapter" data-level="3.5.2" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#toy-problem"><i class="fa fa-check"></i><b>3.5.2</b> Toy Problem</a></li>
-<li class="chapter" data-level="3.5.3" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#parallel-streams-of-random-numbers"><i class="fa fa-check"></i><b>3.5.3</b> Parallel Streams of Random Numbers</a></li>
-<li class="chapter" data-level="3.5.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-example"><i class="fa fa-check"></i><b>3.5.4</b> The Example</a></li>
-<li class="chapter" data-level="3.5.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-try"><i class="fa fa-check"></i><b>3.5.5</b> Try It</a></li>
-<li class="chapter" data-level="3.5.6" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-check"><i class="fa fa-check"></i><b>3.5.6</b> Check It</a></li>
-<li class="chapter" data-level="3.5.7" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-time"><i class="fa fa-check"></i><b>3.5.7</b> Time It</a></li>
+<li class="chapter" data-level="3.5.3" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#warning"><i class="fa fa-check"></i><b>3.5.3</b> Warning</a></li>
+<li class="chapter" data-level="3.5.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#parallel-streams-of-random-numbers"><i class="fa fa-check"></i><b>3.5.4</b> Parallel Streams of Random Numbers</a></li>
+<li class="chapter" data-level="3.5.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-example"><i class="fa fa-check"></i><b>3.5.5</b> The Example</a></li>
+<li class="chapter" data-level="3.5.6" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-try"><i class="fa fa-check"></i><b>3.5.6</b> Try It</a></li>
+<li class="chapter" data-level="3.5.7" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-check"><i class="fa fa-check"></i><b>3.5.7</b> Check It</a></li>
+<li class="chapter" data-level="3.5.8" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-time"><i class="fa fa-check"></i><b>3.5.8</b> Time It</a></li>
 </ul></li>
 <li class="chapter" data-level="3.6" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#the-example-with-a-cluster"><i class="fa fa-check"></i><b>3.6</b> The Example With a Cluster</a><ul>
 <li class="chapter" data-level="3.6.1" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#introduction-3"><i class="fa fa-check"></i><b>3.6.1</b> Introduction</a></li>
@@ -347,9 +348,9 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 ## Model 2: y ~ x + I(x^2)
 ## Model 3: y ~ x + I(x^2) + I(x^3)
 ##   Res.Df   RSS Df Sum of Sq      F Pr(&gt;F)
-## 1     48 11650                           
-## 2     47 11619  1    30.799 0.1235 0.7268
-## 3     46 11468  1   150.650 0.6043 0.4409</code></pre>
+## 1     48 10637                           
+## 2     47 10469  1    167.29 0.7625 0.3871
+## 3     46 10093  1    376.65 1.7167 0.1966</code></pre>
 <p>That is a table of sorts.</p>
 <p>In order to make that a table nicely formatted for the document we are making, first we have to figure out what the output of R function <code>anova</code> is and capture it so we can use it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">foo &lt;-<span class="st"> </span><span class="kw">anova</span>(out1, out2, out3)
@@ -371,7 +372,7 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 <tbody>
 <tr class="odd">
 <td align="right">48</td>
-<td align="right">11649.9</td>
+<td align="right">10636.6</td>
 <td align="right"></td>
 <td align="right"></td>
 <td align="right"></td>
@@ -379,19 +380,19 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 </tr>
 <tr class="even">
 <td align="right">47</td>
-<td align="right">11619.1</td>
+<td align="right">10469.3</td>
 <td align="right">1</td>
-<td align="right">30.80</td>
-<td align="right">0.124</td>
-<td align="right">0.727</td>
+<td align="right">167.29</td>
+<td align="right">0.762</td>
+<td align="right">0.387</td>
 </tr>
 <tr class="odd">
 <td align="right">46</td>
-<td align="right">11468.5</td>
+<td align="right">10092.7</td>
 <td align="right">1</td>
-<td align="right">150.65</td>
-<td align="right">0.604</td>
-<td align="right">0.441</td>
+<td align="right">376.65</td>
+<td align="right">1.717</td>
+<td align="right">0.197</td>
 </tr>
 </tbody>
 </table>
@@ -406,19 +407,21 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-## -37.101  -6.799   3.210  10.563  32.125 
+## -34.550  -7.977   2.636   9.233  25.947 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)
-## (Intercept)  9.5913358  9.6461244   0.994    0.325
-## x            0.2040030  1.6218327   0.126    0.900
-## I(x^2)       0.0605860  0.0735021   0.824    0.414
-## I(x^3)      -0.0007369  0.0009479  -0.777    0.441
+##               Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept) -7.1314953  9.0490398  -0.788   0.4347  
+## x            3.7347520  1.5214430   2.455   0.0179 *
+## I(x^2)      -0.0989579  0.0689524  -1.435   0.1580  
+## I(x^3)       0.0011651  0.0008893   1.310   0.1966  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 15.79 on 46 degrees of freedom
-## Multiple R-squared:  0.6954, Adjusted R-squared:  0.6756 
-## F-statistic: 35.01 on 3 and 46 DF,  p-value: 6.161e-12</code></pre>
-<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(0.060586\)</span> and <span class="math inline">\(-7.3686148\times 10^{-4}\)</span>. Magic!</p>
+## Residual standard error: 14.81 on 46 degrees of freedom
+## Multiple R-squared:  0.6741, Adjusted R-squared:  0.6528 
+## F-statistic: 31.71 on 3 and 46 DF,  p-value: 2.89e-11</code></pre>
+<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(-0.0989579\)</span> and <span class="math inline">\(0.0011651\)</span>. Magic!</p>
 <p>Note that these are coefficients for a regression on random data that is different every time the document is run (although wouldn’t be if we uncommented the <code>set.seed</code> command). By not using snarf-and-barf we always have the right numbers.</p>
 <p>Also note that R Markdown (in its wisdom or unwisdom) forces you to know a little bit of LaTeX. When the number needs “scientific notation” R Markdown emits LaTeX here so the number must be enclosed in dollar signs (the LaTeX math marker for in-line math). So if these weren’t enclosed in dollar signs nonsense would be printed.</p>
 </div>
