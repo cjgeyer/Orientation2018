@@ -1,5 +1,5 @@
-#PBS -q batch
-#PBS -l nodes=1:ppn=8
+#PBS -q multinode
+#PBS -l nodes=3:ppn=4
 
 cd $PBS_O_WORKDIR/
 module load R/3.4.1

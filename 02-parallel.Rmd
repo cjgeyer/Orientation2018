@@ -142,6 +142,21 @@ ncores <- detectCores()
 mclapply(1:ncores, function(x) Sys.getpid(), mc.cores = ncores)
 ```
 
+### Warning
+
+Quoted from the help page for R function `mclapply`
+
+>    It is _strongly discouraged_ to use these functions in GUI or
+>    embedded environments, because it leads to several processes
+>    sharing the same GUI which will likely cause chaos (and possibly
+>    crashes).  Child processes should never use on-screen graphics
+>    devices.
+
+GUI includes RStudio.  If you want speed, then you will have to learn
+how to use plain old R.
+The examples in the [section on using clusters](#latis) show that.
+Of course, this whole document shows that too.
+
 ### Parallel Streams of Random Numbers
 
 To get random numbers in parallel, we need to use a special
@@ -427,7 +442,7 @@ exit
 
 Almost the same thing again
 ```{r engine='bash', eval=FALSE}
-qsub -I -l nodes=1:ppn=8
+qsub -I -q multinode -l nodes=3:ppn=4
 cd tmp/Orientation2018 # or wherever
 wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
 module load R/3.4.1
@@ -436,6 +451,9 @@ cat 02-cluster.Rout
 exit
 exit
 ```
+
+The `qsub` command says we want to use 4 cores on each of 3 nodes (computers)
+for 12 cores total.
 
 ### Fork-Exec as Batch Job
 
