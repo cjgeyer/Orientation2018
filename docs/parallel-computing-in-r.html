@@ -152,8 +152,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="3.6.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#the-example-on-a-cluster"><i class="fa fa-check"></i><b>3.6.4</b> The Example on a Cluster</a></li>
 <li class="chapter" data-level="3.6.5" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#tear-down"><i class="fa fa-check"></i><b>3.6.5</b> Tear Down</a></li>
 </ul></li>
-<li class="chapter" data-level="3.7" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis-and-fork-exec"><i class="fa fa-check"></i><b>3.7</b> LATIS and Fork-Exec</a></li>
-<li class="chapter" data-level="3.8" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis-and-clusters"><i class="fa fa-check"></i><b>3.8</b> LATIS and Clusters</a></li>
+<li class="chapter" data-level="3.7" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#latis"><i class="fa fa-check"></i><b>3.7</b> LATIS</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-exec-in-interactive-session"><i class="fa fa-check"></i><b>3.7.1</b> Fork-Exec in Interactive Session</a></li>
+<li class="chapter" data-level="3.7.2" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#cluster-in-interactive-session"><i class="fa fa-check"></i><b>3.7.2</b> Cluster in Interactive Session</a></li>
+<li class="chapter" data-level="3.7.3" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#fork-exec-as-batch-job"><i class="fa fa-check"></i><b>3.7.3</b> Fork-Exec as Batch Job</a></li>
+<li class="chapter" data-level="3.7.4" data-path="parallel-computing-in-r.html"><a href="parallel-computing-in-r.html#cluster-as-batch-job"><i class="fa fa-check"></i><b>3.7.4</b> Cluster as Batch Job</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="version-control-with-git.html"><a href="version-control-with-git.html"><i class="fa fa-check"></i><b>4</b> Version Control with Git</a><ul>
 <li class="chapter" data-level="4.1" data-path="version-control-with-git.html"><a href="version-control-with-git.html#reading"><i class="fa fa-check"></i><b>4.1</b> Reading</a></li>
@@ -300,28 +304,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 10938
+## [1] 17210
 ## 
 ## [[2]]
-## [1] 10939
+## [1] 17211
 ## 
 ## [[3]]
-## [1] 10940
+## [1] 17212
 ## 
 ## [[4]]
-## [1] 10941
+## [1] 17213
 ## 
 ## [[5]]
-## [1] 10942
+## [1] 17214
 ## 
 ## [[6]]
-## [1] 10943
+## [1] 17215
 ## 
 ## [[7]]
-## [1] 10944
+## [1] 17216
 ## 
 ## [[8]]
-## [1] 10945</code></pre>
+## [1] 17217</code></pre>
 </div>
 <div id="parallel-streams-of-random-numbers" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Parallel Streams of Random Numbers</h3>
@@ -516,28 +520,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 11042
+## [1] 17238
 ## 
 ## [[2]]
-## [1] 11051
+## [1] 17247
 ## 
 ## [[3]]
-## [1] 11060
+## [1] 17256
 ## 
 ## [[4]]
-## [1] 11069
+## [1] 17265
 ## 
 ## [[5]]
-## [1] 11078
+## [1] 17274
 ## 
 ## [[6]]
-## [1] 11087
+## [1] 17283
 ## 
 ## [[7]]
-## [1] 11096
+## [1] 17292
 ## 
 ## [[8]]
-## [1] 11105</code></pre>
+## [1] 17301</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -698,40 +702,59 @@ time5</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 </div>
 </div>
-<div id="latis-and-fork-exec" class="section level2">
-<h2><span class="header-section-number">3.7</span> LATIS and Fork-Exec</h2>
-<p>We are going to just show how to do this in an interactive session.</p>
-<p>which is just like the fork-exec part of this document except for a few minor changes for running on LATIS.</p>
-<p>SSH into <code>compute.cla.umn.edu</code></p>
-<p>Then</p>
+<div id="latis" class="section level2">
+<h2><span class="header-section-number">3.7</span> LATIS</h2>
+<div id="fork-exec-in-interactive-session" class="section level3">
+<h3><span class="header-section-number">3.7.1</span> Fork-Exec in Interactive Session</h3>
+<p>This is just like the fork-exec part of this document except for a few minor changes for running on LATIS.</p>
+<p>SSH into <code>compute.cla.umn.edu</code>. Then</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
-<span class="fu">rm</span> -f 02-fork-exec.R
-<span class="fu">wget</span> https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
+<span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
 <span class="ex">module</span> load R/3.4.1
-<span class="co"># we are assured that a more recent version of R will be available soon</span>
 <span class="ex">R</span> CMD BATCH --vanilla 02-fork-exec.R
 <span class="fu">cat</span> 02-fork-exec.Rout
 <span class="bu">exit</span>
 <span class="bu">exit</span></code></pre></div>
-<p>Shows that this works.</p>
-<p>We are not going to try to explain today how to do this as a batch job.</p>
 </div>
-<div id="latis-and-clusters" class="section level2">
-<h2><span class="header-section-number">3.8</span> LATIS and Clusters</h2>
+<div id="cluster-in-interactive-session" class="section level3">
+<h3><span class="header-section-number">3.7.2</span> Cluster in Interactive Session</h3>
 <p>Almost the same thing again</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
-<span class="fu">rm</span> -f 02-cluster.R
-<span class="fu">wget</span> https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
+<span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
 <span class="ex">module</span> load R/3.4.1
-<span class="co"># we are assured that a more recent version of R will be available soon</span>
 <span class="ex">R</span> CMD BATCH --vanilla 02-cluster.R
 <span class="fu">cat</span> 02-cluster.Rout
 <span class="bu">exit</span>
 <span class="bu">exit</span></code></pre></div>
-<p>except this doesn’t seem to work right now. LATIS seems to have to do some more work on MPI clusters and R.</p>
+</div>
+<div id="fork-exec-as-batch-job" class="section level3">
+<h3><span class="header-section-number">3.7.3</span> Fork-Exec as Batch Job</h3>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
+<span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
+<span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.pbs
+<span class="ex">qsub</span> 02-fork-exec.pbs</code></pre></div>
+<p>If you want e-mail sent to you when the job starts and completes, then add the lines</p>
+<pre><code>### EMAIL NOTIFICATION OPTIONS ###
+#PBS -m abe                     # Send email on a:abort, b:begin, e:end
+#PBS -M yourusername@umn.edu    # Your email address</code></pre>
+<p>to <code>02-fork-exec.pbs</code> where, of course, <code>yourusername</code> is replaced by your actual username.</p>
+<p>The linux command</p>
+<pre><code>qstat</code></pre>
+<p>will tell you if your job is running.</p>
+<p>You can log out of <code>compute.cla.umn.edu</code> after your job starts in batch mode. It will keep running.</p>
+</div>
+<div id="cluster-as-batch-job" class="section level3">
+<h3><span class="header-section-number">3.7.4</span> Cluster as Batch Job</h3>
+<p>Same as above <a href="https://www.merriam-webster.com/dictionary/mutatis%20mutandis"><em>mutatis mutandis</em></a></p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
+<span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
+<span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.pbs
+<span class="ex">qsub</span> 02-cluster.pbs</code></pre></div>
+<p>with the same comment about email.</p>
 
+</div>
 </div>
 </div>
             </section>

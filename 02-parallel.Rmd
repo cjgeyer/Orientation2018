@@ -466,7 +466,7 @@ mode.  It will keep running.
 
 ### Cluster as Batch Job
 
-Same as above *mutatis mutandis*
+Same as above [*mutatis mutandis*](https://www.merriam-webster.com/dictionary/mutatis%20mutandis)
 ```{r engine='bash', eval=FALSE}
 cd tmp/Orientation2018 # or wherever
 wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
