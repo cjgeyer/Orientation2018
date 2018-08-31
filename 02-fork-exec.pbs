@@ -1,0 +1,6 @@
+#PBS -q batch
+#PBS -l nodes=1:ppn=8
+
+cd $PBS_O_WORKDIR/
+module load R/3.4.1
+R CMD BATCH --vanilla 02-fork-exec.R

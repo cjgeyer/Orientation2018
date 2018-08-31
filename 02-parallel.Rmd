@@ -404,45 +404,74 @@ Don't forget to tear down the cluster when you are done.
 stopCluster(cl)
 ```
 
-## LATIS and Fork-Exec
+## LATIS
 
-We are going to just show how to do this in an interactive session.
+### Fork-Exec in Interactive Session
 
-which is just like the fork-exec part of this document except for a few
+This is just like the fork-exec part of this document except for a few
 minor changes for running on LATIS.
 
-SSH into `compute.cla.umn.edu`
-
-Then
+SSH into `compute.cla.umn.edu`.  Then
 ```{r engine='bash', eval=FALSE}
 qsub -I -l nodes=1:ppn=8
 cd tmp/Orientation2018 # or wherever
-rm -f 02-fork-exec.R
-wget https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
+wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
 module load R/3.4.1
-# we are assured that a more recent version of R will be available soon
 R CMD BATCH --vanilla 02-fork-exec.R
 cat 02-fork-exec.Rout
 exit
 exit
 ```
-Shows that this works.
 
-We are not going to try to explain today how to do this as a batch job.
-
-## LATIS and Clusters
+### Cluster in Interactive Session
 
 Almost the same thing again
 ```{r engine='bash', eval=FALSE}
 qsub -I -l nodes=1:ppn=8
 cd tmp/Orientation2018 # or wherever
-rm -f 02-cluster.R
-wget https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
+wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
 module load R/3.4.1
-# we are assured that a more recent version of R will be available soon
 R CMD BATCH --vanilla 02-cluster.R
 cat 02-cluster.Rout
 exit
 exit
 ```
+
+### Fork-Exec as Batch Job
+
+```{r engine='bash', eval=FALSE}
+cd tmp/Orientation2018 # or wherever
+wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
+wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.pbs
+qsub 02-fork-exec.pbs
+```
+If you want e-mail sent to you when the job starts and completes,
+then add the lines
+```
+### EMAIL NOTIFICATION OPTIONS ###
+#PBS -m abe                     # Send email on a:abort, b:begin, e:end
+#PBS -M yourusername@umn.edu    # Your email address
+```
+to `02-fork-exec.pbs` where, of course, `yourusername` is replaced by
+your actual username.
+
+The linux command
+```
+qstat
+```
+will tell you if your job is running.
+
+You can log out of `compute.cla.umn.edu` after your job starts in batch
+mode.  It will keep running.
+
+### Cluster as Batch Job
+
+Same as above *mutatis mutandis*
+```{r engine='bash', eval=FALSE}
+cd tmp/Orientation2018 # or wherever
+wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
+wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.pbs
+qsub 02-cluster.pbs
+```
+with the same comment about email.
 
