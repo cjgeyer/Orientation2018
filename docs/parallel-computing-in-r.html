@@ -236,7 +236,7 @@ mle &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
 <h3><span class="header-section-number">3.4.2</span> Check It</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hist</span>(theta.hat, <span class="dt">probability =</span> <span class="ot">TRUE</span>, <span class="dt">breaks =</span> <span class="dv">30</span>)
 <span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">mean =</span> theta, <span class="dt">sd =</span> theta <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n)), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="02-parallel_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="02-parallel_files/figure-html/hist-non-par-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>The curve is the PDF of the asymptotic normal distribution of the MLE, which uses the formula <span class="math display">\[
    I_n(\theta) = \frac{3 n}{\theta^2}
 \]</span> which you will learn how to calculate when you take a theory course (if you don’t already know).</p>
@@ -256,7 +256,7 @@ mle &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">time1 &lt;-<span class="st"> </span><span class="kw">system.time</span>(theta.hat.mle &lt;-<span class="st"> </span><span class="kw">doit</span>(mle))
 time1</code></pre></div>
 <pre><code>##    user  system elapsed 
-##   0.980   0.000   0.981</code></pre>
+##   0.985   0.000   0.985</code></pre>
 </div>
 <div id="time-it-more-accurately" class="section level3">
 <h3><span class="header-section-number">3.4.4</span> Time It More Accurately</h3>
@@ -268,19 +268,19 @@ time1 &lt;-<span class="st"> </span><span class="ot">NULL</span>
     time1 &lt;-<span class="st"> </span><span class="kw">rbind</span>(time1, <span class="kw">system.time</span>(theta.hat.mle &lt;-<span class="st"> </span><span class="kw">doit</span>(mle)))
 time1</code></pre></div>
 <pre><code>##      user.self sys.self elapsed user.child sys.child
-## [1,]    10.120    0.000  10.120          0         0
-## [2,]     9.871    0.000   9.871          0         0
-## [3,]     9.946    0.000   9.947          0         0
-## [4,]     9.825    0.000   9.825          0         0
-## [5,]     9.696    0.000   9.697          0         0
-## [6,]     9.951    0.000   9.952          0         0
-## [7,]    10.099    0.004  10.104          0         0</code></pre>
+## [1,]    10.112    0.000  10.123          0         0
+## [2,]    10.175    0.001  10.158          0         0
+## [3,]     9.746    0.000   9.726          0         0
+## [4,]     9.963    0.000   9.945          0         0
+## [5,]     9.665    0.000   9.651          0         0
+## [6,]    10.000    0.000   9.987          0         0
+## [7,]     9.517    0.000   9.505          0         0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time1, <span class="dv">2</span>, mean)</code></pre></div>
 <pre><code>##    user.self     sys.self      elapsed   user.child    sys.child 
-## 9.9297142857 0.0005714286 9.9308571429 0.0000000000 0.0000000000</code></pre>
+## 9.8825714286 0.0001428571 9.8707142857 0.0000000000 0.0000000000</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time1, <span class="dv">2</span>, sd) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(nrep)</code></pre></div>
 <pre><code>##    user.self     sys.self      elapsed   user.child    sys.child 
-## 0.0566147021 0.0005714286 0.0568914709 0.0000000000 0.0000000000</code></pre>
+## 0.0923298582 0.0001428571 0.0936286266 0.0000000000 0.0000000000</code></pre>
 </div>
 </div>
 <div id="parallel-computing-with-unix-fork-and-exec" class="section level2">
@@ -300,28 +300,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 31448
+## [1] 10938
 ## 
 ## [[2]]
-## [1] 31449
+## [1] 10939
 ## 
 ## [[3]]
-## [1] 31450
+## [1] 10940
 ## 
 ## [[4]]
-## [1] 31451
+## [1] 10941
 ## 
 ## [[5]]
-## [1] 31452
+## [1] 10942
 ## 
 ## [[6]]
-## [1] 31453
+## [1] 10943
 ## 
 ## [[7]]
-## [1] 31454
+## [1] 10944
 ## 
 ## [[8]]
-## [1] 31455</code></pre>
+## [1] 10945</code></pre>
 </div>
 <div id="parallel-streams-of-random-numbers" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Parallel Streams of Random Numbers</h3>
@@ -463,7 +463,7 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theta.hat &lt;-<span class="st"> </span><span class="kw">unlist</span>(mout)
 <span class="kw">hist</span>(theta.hat, <span class="dt">probability =</span> <span class="ot">TRUE</span>, <span class="dt">breaks =</span> <span class="dv">30</span>)
 <span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">mean =</span> theta, <span class="dt">sd =</span> theta <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n)), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="02-parallel_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="02-parallel_files/figure-html/hist-fork-exec-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="fork-time" class="section level3">
 <h3><span class="header-section-number">3.5.7</span> Time It</h3>
@@ -474,28 +474,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
             <span class="dt">estimator =</span> mle, <span class="dt">mc.cores =</span> ncores))))
 time4</code></pre></div>
 <pre><code>##      user.self sys.self elapsed user.child sys.child
-## [1,]     0.004     0.02   2.130     14.204     0.252
-## [2,]     0.005     0.02   2.189     12.716     0.204
-## [3,]     0.005     0.02   3.039     20.404     0.315
-## [4,]     0.006     0.02   3.019     17.513     0.264
-## [5,]     0.005     0.02   3.005     20.414     0.268
-## [6,]     0.005     0.02   3.123     20.521     0.320
-## [7,]     0.006     0.02   3.090     20.221     0.244</code></pre>
+## [1,]     0.007    0.012   2.191     14.063     0.217
+## [2,]     0.001    0.016   2.733     18.288     0.164
+## [3,]     0.003    0.016   3.156     20.357     0.240
+## [4,]     0.003    0.016   3.093     20.051     0.200
+## [5,]     0.001    0.016   3.091     20.264     0.260
+## [6,]     0.000    0.019   3.132     20.185     0.247
+## [7,]     0.002    0.016   3.079     20.126     0.236</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time4, <span class="dv">2</span>, mean)</code></pre></div>
 <pre><code>##    user.self     sys.self      elapsed   user.child    sys.child 
-##  0.005142857  0.020000000  2.799285714 17.999000000  0.266714286</code></pre>
+##  0.002428571  0.015857143  2.925000000 19.047714286  0.223428571</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time4, <span class="dv">2</span>, sd) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(nrep)</code></pre></div>
 <pre><code>##    user.self     sys.self      elapsed   user.child    sys.child 
-## 2.608203e-04 7.940483e-18 1.660288e-01 1.248450e+00 1.531062e-02</code></pre>
+## 0.0008689661 0.0007693093 0.1337486983 0.8739731857 0.0123901980</code></pre>
 <p>We got the desired speedup. The elapsed time averages</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time4, <span class="dv">2</span>, mean)[<span class="st">&quot;elapsed&quot;</span>]</code></pre></div>
-<pre><code>##  elapsed 
-## 2.799286</code></pre>
+<pre><code>## elapsed 
+##   2.925</code></pre>
 <p>with parallelization and</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time1, <span class="dv">2</span>, mean)[<span class="st">&quot;elapsed&quot;</span>]</code></pre></div>
 <pre><code>##  elapsed 
-## 9.930857</code></pre>
-<p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 3.5-fold speedup. If we had more cores, we could do even better.</p>
+## 9.870714</code></pre>
+<p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 3.4-fold speedup. If we had more cores, we could do even better.</p>
 </div>
 </div>
 <div id="the-example-with-a-cluster" class="section level2">
@@ -516,28 +516,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 31476
+## [1] 11042
 ## 
 ## [[2]]
-## [1] 31485
+## [1] 11051
 ## 
 ## [[3]]
-## [1] 31494
+## [1] 11060
 ## 
 ## [[4]]
-## [1] 31503
+## [1] 11069
 ## 
 ## [[5]]
-## [1] 31512
+## [1] 11078
 ## 
 ## [[6]]
-## [1] 31521
+## [1] 11087
 ## 
 ## [[7]]
-## [1] 31530
+## [1] 11096
 ## 
 ## [[8]]
-## [1] 31539</code></pre>
+## [1] 11105</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -656,7 +656,7 @@ cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">theta.hat &lt;-<span class="st"> </span><span class="kw">unlist</span>(mout)
 <span class="kw">hist</span>(theta.hat, <span class="dt">probability =</span> <span class="ot">TRUE</span>, <span class="dt">breaks =</span> <span class="dv">30</span>)
 <span class="kw">curve</span>(<span class="kw">dnorm</span>(x, <span class="dt">mean =</span> theta, <span class="dt">sd =</span> theta <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">3</span> <span class="op">*</span><span class="st"> </span>n)), <span class="dt">add =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="02-parallel_files/figure-html/unnamed-chunk-20-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="02-parallel_files/figure-html/hist-cluster-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="cluster-time" class="section level4">
 <h4><span class="header-section-number">3.6.4.4</span> Time It</h4>
@@ -667,28 +667,28 @@ cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores
             doit, <span class="dt">estimator =</span> mle))))
 time5</code></pre></div>
 <pre><code>##      user.self sys.self elapsed user.child sys.child
-## [1,]     0.006    0.000   3.204          0         0
-## [2,]     0.002    0.004   3.282          0         0
-## [3,]     0.002    0.004   3.282          0         0
-## [4,]     0.003    0.004   3.249          0         0
-## [5,]     0.007    0.000   3.237          0         0
-## [6,]     0.008    0.000   3.237          0         0
-## [7,]     0.006    0.000   3.202          0         0</code></pre>
+## [1,]     0.007    0.000   3.366          0         0
+## [2,]     0.003    0.004   3.319          0         0
+## [3,]     0.005    0.000   3.346          0         0
+## [4,]     0.000    0.006   3.350          0         0
+## [5,]     0.006    0.000   3.308          0         0
+## [6,]     0.003    0.004   3.376          0         0
+## [7,]     0.002    0.004   3.261          0         0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time5, <span class="dv">2</span>, mean)</code></pre></div>
 <pre><code>##   user.self    sys.self     elapsed  user.child   sys.child 
-## 0.004857143 0.001714286 3.241857143 0.000000000 0.000000000</code></pre>
+## 0.003714286 0.002571429 3.332285714 0.000000000 0.000000000</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time5, <span class="dv">2</span>, sd) <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(nrep)</code></pre></div>
 <pre><code>##    user.self     sys.self      elapsed   user.child    sys.child 
-## 0.0009367769 0.0008081220 0.0122890361 0.0000000000 0.0000000000</code></pre>
+## 0.0009184429 0.0009476071 0.0149582185 0.0000000000 0.0000000000</code></pre>
 <p>We got the desired speedup. The elapsed time averages</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time5, <span class="dv">2</span>, mean)[<span class="st">&quot;elapsed&quot;</span>]</code></pre></div>
 <pre><code>##  elapsed 
-## 3.241857</code></pre>
+## 3.332286</code></pre>
 <p>with parallelization and</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">apply</span>(time1, <span class="dv">2</span>, mean)[<span class="st">&quot;elapsed&quot;</span>]</code></pre></div>
 <pre><code>##  elapsed 
-## 9.930857</code></pre>
-<p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 3.1-fold speedup. If we had more cores, we could do even better.</p>
+## 9.870714</code></pre>
+<p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 3-fold speedup. If we had more cores, we could do even better.</p>
 <p>We also that this method isn’t as good as the other method. So why do we want it (other than that the other doesn’t work on Windows)? Because it scales. You can get clusters with thousands of cores, but you can’t get thousands of cores in one computer.</p>
 </div>
 </div>

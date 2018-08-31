@@ -73,7 +73,7 @@ theta.hat <- doit(mle)
 
 ### Check It
 
-```{r fig.align='center'}
+```{r "hist-non-par", fig.align='center'}
 hist(theta.hat, probability = TRUE, breaks = 30)
 curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
 ```
@@ -101,7 +101,7 @@ mean(theta.hat < 0, na.rm = TRUE)
 ### Time It
 
 Now for something new.  We will time it.
-```{r cache=TRUE, dependson="code"}
+```{r "time-non-par-norep", cache=TRUE, dependson="code"}
 time1 <- system.time(theta.hat.mle <- doit(mle))
 time1
 ```
@@ -110,7 +110,7 @@ time1
 
 That's too short a time for accurate timing.  Also we should probably average
 over several IID iterations to get a good average.  Try again.
-```{r cache=TRUE, dependson="code"}
+```{r "time-non-par", cache=TRUE, dependson="code"}
 nsim <- 1e5
 nrep <- 7
 time1 <- NULL
@@ -197,7 +197,7 @@ doit <- function(nsim, estimator) {
 
 ### Try It {#fork-try}
 
-```{r cache=TRUE, dependson=c("code","code-too")}
+```{r "try-fork-exec", cache=TRUE, dependson=c("code","code-too")}
 mout <- mclapply(rep(nsim / ncores, ncores), doit,
     estimator = mle, mc.cores = ncores)
 lapply(mout, head)
@@ -213,7 +213,7 @@ lapply(mout, head)
 ```
 
 Plot it.
-```{r fig.align='center'}
+```{r "hist-fork-exec", fig.align='center'}
 theta.hat <- unlist(mout)
 hist(theta.hat, probability = TRUE, breaks = 30)
 curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
@@ -221,7 +221,7 @@ curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
 
 ### Time It {#fork-time}
 
-```{r cache=TRUE, dependson=c("code","code-too")}
+```{r "time-fork-exec", cache=TRUE, dependson=c("code","code-too")}
 time4 <- NULL
 for (irep in 1:nrep)
     time4 <- rbind(time4, system.time(theta.hat.mle <-
@@ -341,7 +341,7 @@ to do so.
 #### Try It {#cluster-try}
 
 So now we are set up to try our example.
-```{r cache=TRUE, dependson=c("code","code-too")}
+```{r "try-cluster", cache=TRUE, dependson=c("code","code-too")}
 pout <- parLapply(cl, rep(nsim / ncores, ncores), doit, estimator = mle)
 ```
 
@@ -355,7 +355,7 @@ lapply(pout, head)
 ```
 
 Plot it.
-```{r fig.align='center'}
+```{r "hist-cluster", fig.align='center'}
 theta.hat <- unlist(mout)
 hist(theta.hat, probability = TRUE, breaks = 30)
 curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
@@ -363,7 +363,7 @@ curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
 
 #### Time It {#cluster-time}
 
-```{r cache=TRUE, dependson=c("code","code-too")}
+```{r "time-cluster", cache=TRUE, dependson=c("code","code-too")}
 time5 <- NULL
 for (irep in 1:nrep)
     time5 <- rbind(time5, system.time(theta.hat.mle <-
@@ -445,6 +445,4 @@ cat 02-cluster.Rout
 exit
 exit
 ```
-except this doesn't seem to work right now.  LATIS seems to have to
-do some more work on MPI clusters and R.
 

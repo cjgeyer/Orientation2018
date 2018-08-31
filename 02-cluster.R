@@ -6,7 +6,7 @@ system("hostname -f", intern = TRUE)
 # sample size
 n <- 10
 # simulation sample size
-nsim <- 1e7
+nsim <- 1e5
 # true unknown parameter value
 # of course in the simulation it is known, but we pretend we don't
 # know it and estimate it
@@ -63,10 +63,9 @@ pout <- parLapply(cl, rep(nsim / ncores, ncores), doit, estimator = mle)
 length(pout)
 sapply(pout, length)
 lapply(pout, head)
-lapply(pout, range)
 
 ## ----fig.align='center'--------------------------------------------------
-theta.hat <- unlist(mout)
+theta.hat <- unlist(pout)
 hist(theta.hat, probability = TRUE, breaks = 30)
 curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
 

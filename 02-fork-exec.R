@@ -70,7 +70,6 @@ lapply(mout, head)
 length(mout)
 sapply(mout, length)
 lapply(mout, head)
-lapply(mout, range)
 
 ## ----fig.align='center'--------------------------------------------------
 theta.hat <- unlist(mout)
