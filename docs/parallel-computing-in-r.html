@@ -228,7 +228,7 @@ mle &lt;-<span class="st"> </span><span class="cf">function</span>(x) {
 <ul>
 <li><p>R function <code>doit</code> simulates <code>nsim</code> datasets, applies an estimator supplied as an argument to the function to each, and returns the vector of results.</p></li>
 <li><p>R function <code>mlogl</code> is minus the log likelihood of the model in question. We could easily change the code to do another model by changing only this function. (When the code mimics the math, the design is usually good.)</p></li>
-<li><p>R function <code>mle</code> calculates the estimator by calling R function <code>nlm</code> to minimize it. The starting value, either <code>sign(mean(x)) * sd(x)</code> is a reasonable estimator because <code>mean(x)</code> is a consistent estimator of <span class="math inline">\(\theta\)</span> and <code>sd(x)</code> is a consistent estimator of <span class="math inline">\(\lvert \theta \rvert\)</span>.</p></li>
+<li><p>R function <code>mle</code> calculates the estimator by calling R function <code>nlm</code> to minimize it. The starting value <code>sign(mean(x)) * sd(x)</code> is a reasonable estimator because <code>mean(x)</code> is a consistent estimator of <span class="math inline">\(\theta\)</span> and <code>sd(x)</code> is a consistent estimator of <span class="math inline">\(\lvert \theta \rvert\)</span>.</p></li>
 </ul>
 </div>
 <div id="doing-the-simulation-without-parallelization" class="section level2">
@@ -305,28 +305,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 19931
+## [1] 15820
 ## 
 ## [[2]]
-## [1] 19932
+## [1] 15821
 ## 
 ## [[3]]
-## [1] 19933
+## [1] 15822
 ## 
 ## [[4]]
-## [1] 19934
+## [1] 15823
 ## 
 ## [[5]]
-## [1] 19935
+## [1] 15824
 ## 
 ## [[6]]
-## [1] 19936
+## [1] 15825
 ## 
 ## [[7]]
-## [1] 19937
+## [1] 15826
 ## 
 ## [[8]]
-## [1] 19938</code></pre>
+## [1] 15827</code></pre>
 </div>
 <div id="warning" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Warning</h3>
@@ -529,28 +529,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 19959
+## [1] 15848
 ## 
 ## [[2]]
-## [1] 19968
+## [1] 15857
 ## 
 ## [[3]]
-## [1] 19977
+## [1] 15866
 ## 
 ## [[4]]
-## [1] 19986
+## [1] 15875
 ## 
 ## [[5]]
-## [1] 19995
+## [1] 15884
 ## 
 ## [[6]]
-## [1] 20004
+## [1] 15893
 ## 
 ## [[7]]
-## [1] 20013
+## [1] 15902
 ## 
 ## [[8]]
-## [1] 20022</code></pre>
+## [1] 15911</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -615,19 +615,19 @@ cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores
 <p>We see that clusters do not have the same problem with continuing random number streams that the fork-exec mechanism has.</p>
 <ul>
 <li><p>Using fork-exec there is a <em>parent</em> process and <em>child</em> processes (all running on the same computer) and the <em>child</em> processes end when their work is done (when <code>mclapply</code> finishes).</p></li>
-<li><p>Using clusters there is a <em>master</em> process and <em>slave</em> processes (possibly running on many different computers) and the <em>slave</em> processes end when the cluster is torn down (with <code>stopCluster</code>).</p></li>
+<li><p>Using clusters there is a <em>master</em> process and <em>worker</em> processes (possibly running on many different computers) and the <em>worker</em> processes end when the cluster is torn down (with <code>stopCluster</code>).</p></li>
 </ul>
-<p>So the slave processes continue and remember where they are in the random number stream.</p>
+<p>So the worker processes continue and remember where they are in the random number stream.</p>
 </div>
 <div id="the-example-on-a-cluster" class="section level3">
 <h3><span class="header-section-number">3.6.4</span> The Example on a Cluster</h3>
 <div id="cluster-setup" class="section level4">
 <h4><span class="header-section-number">3.6.4.1</span> Set Up</h4>
-<p>Another complication of using clusters is that the slave processes are completely independent of the master. Any information they have must be explicitly passed to them.</p>
+<p>Another complication of using clusters is that the worker processes are completely independent of the master. Any information they have must be explicitly passed to them.</p>
 <p>This is very unlike the fork-exec model in which all of the child processes are copies of the parent process inheriting all of its memory (and thus knowing about any and all R objects it created).</p>
 <p>So in order for our example to work we must explicitly distribute stuff to the cluster.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">clusterExport</span>(cl, <span class="kw">c</span>(<span class="st">&quot;doit&quot;</span>, <span class="st">&quot;mle&quot;</span>, <span class="st">&quot;mlogl&quot;</span>, <span class="st">&quot;n&quot;</span>, <span class="st">&quot;nsim&quot;</span>, <span class="st">&quot;theta&quot;</span>))</code></pre></div>
-<p>Now all of the slaves have those R objects, as copied from the master process right now. If we change them in the master (pedantically if we change the R objects those <em>names</em> refer to) the slaves won’t know about it. They only would make changes if code were executed on them to do so.</p>
+<p>Now all of the workers have those R objects, as copied from the master process right now. If we change them in the master (pedantically if we change the R objects those <em>names</em> refer to) the workers won’t know about it. They only would make changes if code were executed on them to do so.</p>
 </div>
 <div id="cluster-try" class="section level4">
 <h4><span class="header-section-number">3.6.4.2</span> Try It</h4>

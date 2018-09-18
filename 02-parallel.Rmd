@@ -58,7 +58,7 @@ mle <- function(x) {
    this function.  (When the code mimics the math, the design is usually good.)
 
  * R function `mle` calculates the estimator by calling R function `nlm` to
-   minimize it.  The starting value, either `sign(mean(x)) * sd(x)` is a
+   minimize it.  The starting value `sign(mean(x)) * sd(x)` is a
    reasonable estimator because `mean(x)` is a consistent estimator
    of $\theta$ and `sd(x)` is a consistent estimator of
    $\lvert \theta \rvert$.
@@ -323,18 +323,18 @@ random number streams that the fork-exec mechanism has.
    (all running on the same computer) and the *child* processes end
    when their work is done (when `mclapply` finishes).
 
- * Using clusters there is a *master* process and *slave* processes
-   (possibly running on many different computers) and the *slave*
+ * Using clusters there is a *master* process and *worker* processes
+   (possibly running on many different computers) and the *worker*
    processes end when the cluster is torn down (with `stopCluster`).
 
-So the slave processes continue and remember where they are in the
+So the worker processes continue and remember where they are in the
 random number stream.
 
 ### The Example on a Cluster
 
 #### Set Up {#cluster-setup}
 
-Another complication of using clusters is that the slave processes
+Another complication of using clusters is that the worker processes
 are completely independent of the master.  Any information they have
 must be explicitly passed to them.
 
@@ -348,9 +348,9 @@ to the cluster.
 clusterExport(cl, c("doit", "mle", "mlogl", "n", "nsim", "theta"))
 ```
 
-Now all of the slaves have those R objects, as copied from the master
+Now all of the workers have those R objects, as copied from the master
 process right now.  If we change them in the master (pedantically if
-we change the R objects those *names* refer to) the slaves won't know
+we change the R objects those *names* refer to) the workers won't know
 about it.  They only would make changes if code were executed on them
 to do so.
 
