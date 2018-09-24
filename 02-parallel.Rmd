@@ -108,7 +108,8 @@ time1
 
 ### Time It More Accurately
 
-That's too short a time for accurate timing.  Also we should probably average
+That's too short a time for accurate timing.  So increase the number
+of iterations.  Also we should probably average
 over several IID iterations to get a good average.  Try again.
 ```{r "time-non-par", cache=TRUE, dependson="code"}
 nsim <- 1e5
@@ -156,6 +157,7 @@ GUI includes RStudio.  If you want speed, then you will have to learn
 how to use plain old R.
 The examples in the [section on using clusters](#latis) show that.
 Of course, this whole document shows that too.
+(No RStudio was used to make this document.)
 
 ### Parallel Streams of Random Numbers
 
@@ -327,8 +329,8 @@ random number streams that the fork-exec mechanism has.
    (possibly running on many different computers) and the *worker*
    processes end when the cluster is torn down (with `stopCluster`).
 
-So the worker processes continue and remember where they are in the
-random number stream.
+So the worker processes continue and each remembers where it is in its
+random number stream (each has a different random number stream).
 
 ### The Example on a Cluster
 
@@ -408,7 +410,7 @@ time needs to be taken from this number crunching to run the rest of the
 computer.  However, we did get a `r round(rats, 1)`-fold speedup.  If we had
 more cores, we could do even better.
 
-We also that this method isn't as good as the other method.
+We also see that this method isn't quite as fast as the other method.
 So why do we want it (other than that the other doesn't work on Windows)?
 Because it scales.  You can get clusters with thousands of cores, but
 you can't get thousands of cores in one computer.
