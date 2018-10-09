@@ -265,7 +265,7 @@ time1</code></pre></div>
 </div>
 <div id="time-it-more-accurately" class="section level3">
 <h3><span class="header-section-number">3.4.4</span> Time It More Accurately</h3>
-<p>That’s too short a time for accurate timing. Also we should probably average over several IID iterations to get a good average. Try again.</p>
+<p>That’s too short a time for accurate timing. So increase the number of iterations. Also we should probably average over several IID iterations to get a good average. Try again.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nsim &lt;-<span class="st"> </span><span class="fl">1e5</span>
 nrep &lt;-<span class="st"> </span><span class="dv">7</span>
 time1 &lt;-<span class="st"> </span><span class="ot">NULL</span>
@@ -305,28 +305,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 15820
+## [1] 4623
 ## 
 ## [[2]]
-## [1] 15821
+## [1] 4624
 ## 
 ## [[3]]
-## [1] 15822
+## [1] 4625
 ## 
 ## [[4]]
-## [1] 15823
+## [1] 4626
 ## 
 ## [[5]]
-## [1] 15824
+## [1] 4627
 ## 
 ## [[6]]
-## [1] 15825
+## [1] 4628
 ## 
 ## [[7]]
-## [1] 15826
+## [1] 4629
 ## 
 ## [[8]]
-## [1] 15827</code></pre>
+## [1] 4630</code></pre>
 </div>
 <div id="warning" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Warning</h3>
@@ -334,7 +334,7 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <blockquote>
 <p>It is <em>strongly discouraged</em> to use these functions in GUI or embedded environments, because it leads to several processes sharing the same GUI which will likely cause chaos (and possibly crashes). Child processes should never use on-screen graphics devices.</p>
 </blockquote>
-<p>GUI includes RStudio. If you want speed, then you will have to learn how to use plain old R. The examples in the <a href="parallel-computing-in-r.html#latis">section on using clusters</a> show that. Of course, this whole document shows that too.</p>
+<p>GUI includes RStudio. If you want speed, then you will have to learn how to use plain old R. The examples in the <a href="parallel-computing-in-r.html#latis">section on using clusters</a> show that. Of course, this whole document shows that too. (No RStudio was used to make this document.)</p>
 </div>
 <div id="parallel-streams-of-random-numbers" class="section level3">
 <h3><span class="header-section-number">3.5.4</span> Parallel Streams of Random Numbers</h3>
@@ -529,28 +529,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 15848
+## [1] 4651
 ## 
 ## [[2]]
-## [1] 15857
+## [1] 4660
 ## 
 ## [[3]]
-## [1] 15866
+## [1] 4669
 ## 
 ## [[4]]
-## [1] 15875
+## [1] 4678
 ## 
 ## [[5]]
-## [1] 15884
+## [1] 4687
 ## 
 ## [[6]]
-## [1] 15893
+## [1] 4696
 ## 
 ## [[7]]
-## [1] 15902
+## [1] 4705
 ## 
 ## [[8]]
-## [1] 15911</code></pre>
+## [1] 4714</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -617,7 +617,7 @@ cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores
 <li><p>Using fork-exec there is a <em>parent</em> process and <em>child</em> processes (all running on the same computer) and the <em>child</em> processes end when their work is done (when <code>mclapply</code> finishes).</p></li>
 <li><p>Using clusters there is a <em>master</em> process and <em>worker</em> processes (possibly running on many different computers) and the <em>worker</em> processes end when the cluster is torn down (with <code>stopCluster</code>).</p></li>
 </ul>
-<p>So the worker processes continue and remember where they are in the random number stream.</p>
+<p>So the worker processes continue and each remembers where it is in its random number stream (each has a different random number stream).</p>
 </div>
 <div id="the-example-on-a-cluster" class="section level3">
 <h3><span class="header-section-number">3.6.4</span> The Example on a Cluster</h3>
@@ -702,7 +702,7 @@ time5</code></pre></div>
 <pre><code>##  elapsed 
 ## 9.870714</code></pre>
 <p>without parallelization. But we did not get an 8-fold speedup with 8 cores. There is a cost to starting and stopping the child processes. And some time needs to be taken from this number crunching to run the rest of the computer. However, we did get a 3-fold speedup. If we had more cores, we could do even better.</p>
-<p>We also that this method isn’t as good as the other method. So why do we want it (other than that the other doesn’t work on Windows)? Because it scales. You can get clusters with thousands of cores, but you can’t get thousands of cores in one computer.</p>
+<p>We also see that this method isn’t quite as fast as the other method. So why do we want it (other than that the other doesn’t work on Windows)? Because it scales. You can get clusters with thousands of cores, but you can’t get thousands of cores in one computer.</p>
 </div>
 </div>
 <div id="tear-down" class="section level3">
@@ -720,7 +720,7 @@ time5</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
 <span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
-<span class="ex">module</span> load R/3.4.1
+<span class="ex">module</span> load R/3.5.1
 <span class="ex">R</span> CMD BATCH --vanilla 02-fork-exec.R
 <span class="fu">cat</span> 02-fork-exec.Rout
 <span class="bu">exit</span>
@@ -732,7 +732,7 @@ time5</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -q multinode -l nodes=3:ppn=4
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
 <span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
-<span class="ex">module</span> load R/3.4.1
+<span class="ex">module</span> load R/3.5.1
 <span class="ex">R</span> CMD BATCH --vanilla 02-cluster.R
 <span class="fu">cat</span> 02-cluster.Rout
 <span class="bu">exit</span>
