@@ -305,28 +305,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 4623
+## [1] 6058
 ## 
 ## [[2]]
-## [1] 4624
+## [1] 6059
 ## 
 ## [[3]]
-## [1] 4625
+## [1] 6060
 ## 
 ## [[4]]
-## [1] 4626
+## [1] 6061
 ## 
 ## [[5]]
-## [1] 4627
+## [1] 6062
 ## 
 ## [[6]]
-## [1] 4628
+## [1] 6063
 ## 
 ## [[7]]
-## [1] 4629
+## [1] 6064
 ## 
 ## [[8]]
-## [1] 4630</code></pre>
+## [1] 6065</code></pre>
 </div>
 <div id="warning" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Warning</h3>
@@ -517,7 +517,7 @@ time4</code></pre></div>
 <h3><span class="header-section-number">3.6.1</span> Introduction</h3>
 <p>This method is more complicated but</p>
 <ul>
-<li><p>it works on clusters like the ones at <a href="http://z.umn.edu/claresearchcomputing">LATIS (College of Liberal Arts Technologies and Innovation Services</a> or at the <a href="https://www.msi.umn.edu/">Minnesota Supercomputing Institute</a>.</p></li>
+<li><p>it works on clusters like the ones at <a href="http://z.umn.edu/claresearchcomputing">LATIS (College of Liberal Arts Technologies and Innovation Services)</a> or at the <a href="https://www.msi.umn.edu/">Minnesota Supercomputing Institute</a>.</p></li>
 <li><p>according to the documentation, it does work on Windows.</p></li>
 </ul>
 </div>
@@ -529,28 +529,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 4651
+## [1] 6086
 ## 
 ## [[2]]
-## [1] 4660
+## [1] 6095
 ## 
 ## [[3]]
-## [1] 4669
+## [1] 6104
 ## 
 ## [[4]]
-## [1] 4678
+## [1] 6113
 ## 
 ## [[5]]
-## [1] 4687
+## [1] 6122
 ## 
 ## [[6]]
-## [1] 4696
+## [1] 6131
 ## 
 ## [[7]]
-## [1] 4705
+## [1] 6140
 ## 
 ## [[8]]
-## [1] 4714</code></pre>
+## [1] 6149</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -720,7 +720,7 @@ time5</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
 <span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
-<span class="ex">module</span> load R/3.5.1
+<span class="ex">module</span> load R/3.4.1
 <span class="ex">R</span> CMD BATCH --vanilla 02-fork-exec.R
 <span class="fu">cat</span> 02-fork-exec.Rout
 <span class="bu">exit</span>
@@ -732,7 +732,7 @@ time5</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -q multinode -l nodes=3:ppn=4
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
 <span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
-<span class="ex">module</span> load R/3.5.1
+<span class="ex">module</span> load R/3.4.1
 <span class="ex">R</span> CMD BATCH --vanilla 02-cluster.R
 <span class="fu">cat</span> 02-cluster.Rout
 <span class="bu">exit</span>

@@ -276,7 +276,7 @@ This method is more complicated but
 
  * it works on clusters like the ones at
 [LATIS (College of Liberal Arts Technologies and Innovation
-Services](http://z.umn.edu/claresearchcomputing) or at the
+Services)](http://z.umn.edu/claresearchcomputing) or at the
 [Minnesota Supercomputing Institute](https://www.msi.umn.edu/).
 
  * according to the documentation, it does work on Windows.
@@ -434,7 +434,7 @@ SSH into `compute.cla.umn.edu`.  Then
 qsub -I -l nodes=1:ppn=8
 cd tmp/Orientation2018 # or wherever
 wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
-module load R/3.5.1
+module load R/3.4.1
 R CMD BATCH --vanilla 02-fork-exec.R
 cat 02-fork-exec.Rout
 exit
@@ -448,7 +448,7 @@ Almost the same thing again
 qsub -I -q multinode -l nodes=3:ppn=4
 cd tmp/Orientation2018 # or wherever
 wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
-module load R/3.5.1
+module load R/3.4.1
 R CMD BATCH --vanilla 02-cluster.R
 cat 02-cluster.Rout
 exit

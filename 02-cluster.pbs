@@ -2,5 +2,5 @@
 #PBS -l nodes=3:ppn=4
 
 cd $PBS_O_WORKDIR/
-module load R/3.5.1
+module load R/3.4.1
 R CMD BATCH --vanilla 02-cluster.R
