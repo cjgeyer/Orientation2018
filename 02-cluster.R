@@ -40,7 +40,7 @@ library(parallel)
 # ncores <- detectCores()
 # that gives the number of physical cores, not how many you are allowed
 # instead use
-ncores <- as.numeric(Sys.getenv("PBS_NP"))
+ncores <- as.numeric(Sys.getenv("PBS_NUM_PPN"))
 ncores
 # don't use PSOCK cluster on LATIS, use MPI cluster
 cl <- makeCluster(ncores, "MPI")

@@ -40,7 +40,7 @@ library(parallel)
 # ncores <- detectCores()
 # that gives the number of physical cores, not how many you are allowed
 # instead use
-ncores <- as.numeric(Sys.getenv("PBS_NP"))
+ncores <- as.numeric(Sys.getenv("PBS_NUM_PPN"))
 ncores
 mclapply(1:ncores, function(x) Sys.getpid(), mc.cores = ncores)
 

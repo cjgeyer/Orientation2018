@@ -4,4 +4,5 @@ doit.Rout
 *.bak
 _bookdown_files
 docs/02-parallel_files
-
+docs/04-checkpoint_files/
+*.rda
