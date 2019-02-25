@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Notes for Grad Student Orientation 2018</title>
-  <meta name="description" content="Notes for Grad Student Orientation 2018">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title> 3 Parallel Computing in R | Notes for Grad Student Orientation 2018</title>
+  <meta name="description" content=" 3 Parallel Computing in R | Notes for Grad Student Orientation 2018">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Notes for Grad Student Orientation 2018" />
+  <meta property="og:title" content=" 3 Parallel Computing in R | Notes for Grad Student Orientation 2018" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="cjgeyer/Orientation2018/docs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Notes for Grad Student Orientation 2018" />
+  <meta name="twitter:title" content=" 3 Parallel Computing in R | Notes for Grad Student Orientation 2018" />
   
   
   
@@ -35,6 +35,7 @@
 <link rel="next" href="version-control-with-git.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -305,28 +306,28 @@ time1</code></pre></div>
 ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 <span class="kw">mclapply</span>(<span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>(), <span class="dt">mc.cores =</span> ncores)</code></pre></div>
 <pre><code>## [[1]]
-## [1] 6058
+## [1] 19972
 ## 
 ## [[2]]
-## [1] 6059
+## [1] 19973
 ## 
 ## [[3]]
-## [1] 6060
+## [1] 19974
 ## 
 ## [[4]]
-## [1] 6061
+## [1] 19975
 ## 
 ## [[5]]
-## [1] 6062
+## [1] 19976
 ## 
 ## [[6]]
-## [1] 6063
+## [1] 19977
 ## 
 ## [[7]]
-## [1] 6064
+## [1] 19978
 ## 
 ## [[8]]
-## [1] 6065</code></pre>
+## [1] 19979</code></pre>
 </div>
 <div id="warning" class="section level3">
 <h3><span class="header-section-number">3.5.3</span> Warning</h3>
@@ -529,28 +530,28 @@ ncores &lt;-<span class="st"> </span><span class="kw">detectCores</span>()
 cl &lt;-<span class="st"> </span><span class="kw">makePSOCKcluster</span>(ncores)
 <span class="kw">parLapply</span>(cl, <span class="dv">1</span><span class="op">:</span>ncores, <span class="cf">function</span>(x) <span class="kw">Sys.getpid</span>())</code></pre></div>
 <pre><code>## [[1]]
-## [1] 6086
+## [1] 20000
 ## 
 ## [[2]]
-## [1] 6095
+## [1] 20009
 ## 
 ## [[3]]
-## [1] 6104
+## [1] 20018
 ## 
 ## [[4]]
-## [1] 6113
+## [1] 20027
 ## 
 ## [[5]]
-## [1] 6122
+## [1] 20036
 ## 
 ## [[6]]
-## [1] 6131
+## [1] 20045
 ## 
 ## [[7]]
-## [1] 6140
+## [1] 20054
 ## 
 ## [[8]]
-## [1] 6149</code></pre>
+## [1] 20063</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">stopCluster</span>(cl)</code></pre></div>
 <p>This is more complicated in that</p>
 <ul>
@@ -720,7 +721,7 @@ time5</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -l nodes=1:ppn=8
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
 <span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
-<span class="ex">module</span> load R/3.4.1
+<span class="ex">module</span> load R/3.5.1
 <span class="ex">R</span> CMD BATCH --vanilla 02-fork-exec.R
 <span class="fu">cat</span> 02-fork-exec.Rout
 <span class="bu">exit</span>
@@ -728,11 +729,21 @@ time5</code></pre></div>
 </div>
 <div id="cluster-in-interactive-session" class="section level3">
 <h3><span class="header-section-number">3.7.2</span> Cluster in Interactive Session</h3>
-<p>Almost the same thing again</p>
+<p>In order for the cluster to work, we need to install R packages <code>Rmpi</code> and <code>snow</code> which LATIS does not install for us. So users have to install them themselves (like any other CRAN package they want to use).</p>
+<pre><code>qsub -I
+module load R/3.5.1
+R --vanilla
+install.packages(&quot;Rmpi&quot;)
+install.packages(&quot;snow&quot;)
+q()
+exit
+exit</code></pre>
+<p>R function <code>install.packages</code> will tell you that it cannot install the packages in the usual place and asks you if you want to install it in a “personal library”. Say yes. Then it suggests a location for the “personal library”. Say yes. Then it asks you to choose a CRAN mirror. Option 1 will always do. This only needs to be done once for each user.</p>
+<p>Now almost the same thing again</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="ex">qsub</span> -I -q multinode -l nodes=3:ppn=4
 <span class="bu">cd</span> tmp/Orientation2018 <span class="co"># or wherever</span>
 <span class="fu">wget</span> -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
-<span class="ex">module</span> load R/3.4.1
+<span class="ex">module</span> load R/3.5.1
 <span class="ex">R</span> CMD BATCH --vanilla 02-cluster.R
 <span class="fu">cat</span> 02-cluster.Rout
 <span class="bu">exit</span>
@@ -793,9 +804,10 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"],
+"instapper": false
 },
 "fontsettings": {
 "theme": "white",
@@ -803,6 +815,10 @@ gitbook.start({
 "size": 2
 },
 "edit": null,
+"history": {
+"link": null,
+"text": null
+},
 "download": ["Orientation2018.pdf", "Orientation2018.epub"],
 "toc": {
 "collapse": "section",
@@ -823,7 +839,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

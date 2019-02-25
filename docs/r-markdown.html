@@ -5,11 +5,11 @@
 
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Notes for Grad Student Orientation 2018</title>
-  <meta name="description" content="Notes for Grad Student Orientation 2018">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <title> 2 R Markdown | Notes for Grad Student Orientation 2018</title>
+  <meta name="description" content=" 2 R Markdown | Notes for Grad Student Orientation 2018">
+  <meta name="generator" content="bookdown  and GitBook 2.6.7">
 
-  <meta property="og:title" content="Notes for Grad Student Orientation 2018" />
+  <meta property="og:title" content=" 2 R Markdown | Notes for Grad Student Orientation 2018" />
   <meta property="og:type" content="book" />
   
   
@@ -17,7 +17,7 @@
   <meta name="github-repo" content="cjgeyer/Orientation2018/docs" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Notes for Grad Student Orientation 2018" />
+  <meta name="twitter:title" content=" 2 R Markdown | Notes for Grad Student Orientation 2018" />
   
   
   
@@ -35,6 +35,7 @@
 <link rel="next" href="parallel-computing-in-r.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -347,10 +348,10 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 ## Model 1: y ~ x
 ## Model 2: y ~ x + I(x^2)
 ## Model 3: y ~ x + I(x^2) + I(x^3)
-##   Res.Df   RSS Df Sum of Sq      F Pr(&gt;F)  
-## 1     48 13270                             
-## 2     47 13140  1    129.12 0.5216 0.4738  
-## 3     46 11388  1   1752.63 7.0796 0.0107 *
+##   Res.Df   RSS Df Sum of Sq      F  Pr(&gt;F)  
+## 1     48 16698                              
+## 2     47 16659  1     39.03 0.1191 0.73161  
+## 3     46 15076  1   1582.30 4.8278 0.03308 *
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>That is a table of sorts.</p>
@@ -374,7 +375,7 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 <tbody>
 <tr class="odd">
 <td align="right">48</td>
-<td align="right">13269.6</td>
+<td align="right">16697.7</td>
 <td align="right"></td>
 <td align="right"></td>
 <td align="right"></td>
@@ -382,19 +383,19 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 </tr>
 <tr class="even">
 <td align="right">47</td>
-<td align="right">13140.5</td>
+<td align="right">16658.7</td>
 <td align="right">1</td>
-<td align="right">129.12</td>
-<td align="right">0.522</td>
-<td align="right">0.474</td>
+<td align="right">39.03</td>
+<td align="right">0.119</td>
+<td align="right">0.732</td>
 </tr>
 <tr class="odd">
 <td align="right">46</td>
-<td align="right">11387.8</td>
+<td align="right">15076.4</td>
 <td align="right">1</td>
-<td align="right">1752.63</td>
-<td align="right">7.080</td>
-<td align="right">0.011</td>
+<td align="right">1582.30</td>
+<td align="right">4.828</td>
+<td align="right">0.033</td>
 </tr>
 </tbody>
 </table>
@@ -408,22 +409,22 @@ out3 &lt;-<span class="st"> </span><span class="kw">lm</span>(y <span class="op"
 ## lm(formula = y ~ x + I(x^2) + I(x^3))
 ## 
 ## Residuals:
-##     Min      1Q  Median      3Q     Max 
-## -30.540  -8.950  -1.001   8.920  40.517 
+##    Min     1Q Median     3Q    Max 
+## -34.83 -11.88  -0.29  11.00  47.72 
 ## 
 ## Coefficients:
-##               Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)  9.8935997  9.6121351   1.029   0.3087  
-## x           -1.7402996  1.6161180  -1.077   0.2872  
-## I(x^2)       0.1836361  0.0732431   2.507   0.0158 *
-## I(x^3)      -0.0025133  0.0009446  -2.661   0.0107 *
+##               Estimate Std. Error t value Pr(&gt;|t|)   
+## (Intercept) -15.639665  11.059835  -1.414  0.16407   
+## x             5.027970   1.859524   2.704  0.00957 **
+## I(x^2)       -0.177941   0.084274  -2.111  0.04020 * 
+## I(x^3)        0.002388   0.001087   2.197  0.03308 * 
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Residual standard error: 15.73 on 46 degrees of freedom
-## Multiple R-squared:  0.754,  Adjusted R-squared:  0.7379 
-## F-statistic: 46.99 on 3 and 46 DF,  p-value: 4.729e-14</code></pre>
-<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(0.1836361\)</span> and <span class="math inline">\(-0.0025133\)</span>. Magic!</p>
+## Residual standard error: 18.1 on 46 degrees of freedom
+## Multiple R-squared:  0.6261, Adjusted R-squared:  0.6017 
+## F-statistic: 25.67 on 3 and 46 DF,  p-value: 6.576e-10</code></pre>
+<p>The coefficients for x<sup>2</sup> and x<sup>3</sup> are not statistically significant, as shown by the ANOVA table. What they actually were was <span class="math inline">\(-0.177941\)</span> and <span class="math inline">\(0.0023881\)</span>. Magic!</p>
 <p>Note that these are coefficients for a regression on random data that is different every time the document is run (although wouldn’t be if we uncommented the <code>set.seed</code> command). By not using snarf-and-barf we always have the right numbers.</p>
 <p>Also note that R Markdown (in its wisdom or unwisdom) forces you to know a little bit of LaTeX. When the number needs “scientific notation” R Markdown emits LaTeX here so the number must be enclosed in dollar signs (the LaTeX math marker for in-line math). So if these weren’t enclosed in dollar signs nonsense would be printed.</p>
 </div>
@@ -467,9 +468,10 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"],
+"instapper": false
 },
 "fontsettings": {
 "theme": "white",
@@ -477,6 +479,10 @@ gitbook.start({
 "size": 2
 },
 "edit": null,
+"history": {
+"link": null,
+"text": null
+},
 "download": ["Orientation2018.pdf", "Orientation2018.epub"],
 "toc": {
 "collapse": "section",
@@ -497,7 +503,7 @@ gitbook.start({
     var script = document.createElement("script");
     script.type = "text/javascript";
     var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

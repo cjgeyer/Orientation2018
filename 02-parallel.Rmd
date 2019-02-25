@@ -434,7 +434,7 @@ SSH into `compute.cla.umn.edu`.  Then
 qsub -I -l nodes=1:ppn=8
 cd tmp/Orientation2018 # or wherever
 wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-fork-exec.R
-module load R/3.4.1
+module load R/3.5.1
 R CMD BATCH --vanilla 02-fork-exec.R
 cat 02-fork-exec.Rout
 exit
@@ -443,12 +443,33 @@ exit
 
 ### Cluster in Interactive Session
 
-Almost the same thing again
+In order for the cluster to work, we need to install R packages
+`Rmpi` and `snow` which LATIS does not install for us.
+So users have to install them themselves (like any other CRAN package
+they want to use).
+```
+qsub -I
+module load R/3.5.1
+R --vanilla
+install.packages("Rmpi")
+install.packages("snow")
+q()
+exit
+exit
+```
+R function ```install.packages``` will tell you that it cannot install
+the packages in the usual place and asks you if you want to install
+it in a "personal library".  Say yes.  Then it suggests a location for
+the "personal library".  Say yes.  Then it asks you to choose a CRAN
+mirror.  Option 1 will always do.  This only needs to be done once for
+each user.
+
+Now almost the same thing again
 ```{r engine='bash', eval=FALSE}
 qsub -I -q multinode -l nodes=3:ppn=4
 cd tmp/Orientation2018 # or wherever
 wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
-module load R/3.4.1
+module load R/3.5.1
 R CMD BATCH --vanilla 02-cluster.R
 cat 02-cluster.Rout
 exit
