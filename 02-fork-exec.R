@@ -37,11 +37,14 @@ mle <- function(x) {
 ## ------------------------------------------------------------------------
 library(parallel)
 # don't figure out cores on LATIS with
-# ncores <- detectCores()
+#     ncores <- detectCores()
 # that gives the number of physical cores, not how many you are allowed
-# instead use
+# to use.  Instead use
 ncores <- as.numeric(Sys.getenv("PBS_NUM_PPN"))
 ncores
+# Also note that when we are using more than one node
+# we need to figure that out from another Sys.getenv
+# see script for clusters
 mclapply(1:ncores, function(x) Sys.getpid(), mc.cores = ncores)
 
 ## ------------------------------------------------------------------------

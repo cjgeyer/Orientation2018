@@ -39,16 +39,17 @@ library(parallel)
 # don't figure out cores on LATIS with
 # ncores <- detectCores()
 # that gives the number of physical cores, not how many you are allowed
-# instead use
-ncores <- as.numeric(Sys.getenv("PBS_NUM_PPN"))
-ncores
+# to use.  Instead use
+nppn <- as.numeric(Sys.getenv("PBS_NUM_PPN"))
+nnode <- as.numeric(Sys.getenv("PBS_NUM_NODES"))
+ncores <- nppn * nnode - 1
 # don't use PSOCK cluster on LATIS, use MPI cluster
 cl <- makeCluster(ncores, "MPI")
 parLapply(cl, 1:ncores, function(x) Sys.getpid())
 stopCluster(cl)
 
 ## ------------------------------------------------------------------------
-cl <- makePSOCKcluster(ncores)
+cl <- makeCluster(ncores, "MPI")
 clusterSetRNGStream(cl, 42)
 parLapply(cl, 1:ncores, function(x) rnorm(5))
 parLapply(cl, 1:ncores, function(x) rnorm(5))
