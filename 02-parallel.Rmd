@@ -464,20 +464,21 @@ the "personal library".  Say yes.  Then it asks you to choose a CRAN
 mirror.  Option 1 will always do.  This only needs to be done once for
 each user.
 
-Now almost the same thing again
+Now almost the same thing again (again we use only one node because we
+are only allowed one node for an interactive queue)
 ```{r engine='bash', eval=FALSE}
-qsub -I -q multinode -l nodes=3:ppn=4
+qsub -I -l nodes=1:ppn=8
 cd tmp/Orientation2018 # or wherever
 wget -N https://raw.githubusercontent.com/cjgeyer/Orientation2018/master/02-cluster.R
 module load R/3.5.1
-R CMD BATCH --vanilla 02-cluster.R
+R CMD BATCH --no-save --no-restore 02-cluster.R
 cat 02-cluster.Rout
 exit
 exit
 ```
 
-The `qsub` command says we want to use 4 cores on each of 3 nodes (computers)
-for 12 cores total.
+The `qsub` command says we want to use 8 cores on 1 node (computers).
+The interactive queue is not allowed to use more than one node.
 
 ### Fork-Exec as Batch Job
 

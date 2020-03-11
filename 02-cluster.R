@@ -6,14 +6,13 @@ system("hostname -f", intern = TRUE)
 # sample size
 n <- 10
 # simulation sample size
-nsim <- 1e5
+nsim <- 1e3
 # true unknown parameter value
 # of course in the simulation it is known, but we pretend we don't
 # know it and estimate it
 theta <- 1
 
-doit <- function(estimator, seed = 42) {
-    set.seed(seed)
+doit <- function(nsim, estimator) {
     result <- double(nsim)
     for (i in 1:nsim) {
         x <- rnorm(n, theta, abs(theta))
@@ -37,19 +36,19 @@ mle <- function(x) {
 ## ------------------------------------------------------------------------
 library(parallel)
 # don't figure out cores on LATIS with
-# ncores <- detectCores()
+#     ncores <- detectCores()
 # that gives the number of physical cores, not how many you are allowed
 # to use.  Instead use
 nppn <- as.numeric(Sys.getenv("PBS_NUM_PPN"))
+nppn
 nnode <- as.numeric(Sys.getenv("PBS_NUM_NODES"))
+nnode
 ncores <- nppn * nnode - 1
 # don't use PSOCK cluster on LATIS, use MPI cluster
 cl <- makeCluster(ncores, "MPI")
 parLapply(cl, 1:ncores, function(x) Sys.getpid())
-stopCluster(cl)
 
 ## ------------------------------------------------------------------------
-cl <- makeCluster(ncores, "MPI")
 clusterSetRNGStream(cl, 42)
 parLapply(cl, 1:ncores, function(x) rnorm(5))
 parLapply(cl, 1:ncores, function(x) rnorm(5))
@@ -58,7 +57,11 @@ parLapply(cl, 1:ncores, function(x) rnorm(5))
 clusterExport(cl, c("doit", "mle", "mlogl", "n", "nsim", "theta"))
 
 ## ----cache=TRUE----------------------------------------------------------
-pout <- parLapply(cl, rep(nsim / ncores, ncores), doit, estimator = mle)
+npart <- rep(floor(nsim / ncores), ncores)
+npart[1:ncores <= nsim %% ncores] <- npart[1:ncores <= nsim %% ncores] + 1
+npart
+sum(npart)
+pout <- parLapply(cl, npart, doit, estimator = mle)
 
 ## ------------------------------------------------------------------------
 length(pout)
@@ -67,6 +70,7 @@ lapply(pout, head)
 
 ## ----fig.align='center'--------------------------------------------------
 theta.hat <- unlist(pout)
+length(theta.hat)
 hist(theta.hat, probability = TRUE, breaks = 30)
 curve(dnorm(x, mean = theta, sd = theta / sqrt(3 * n)), add = TRUE)
 
